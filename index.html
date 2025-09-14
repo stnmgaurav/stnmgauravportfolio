@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gaurav's Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
   <style>
     body {
       margin: 0;
@@ -86,6 +88,38 @@
     <p>👉 Project 1: Personal Portfolio Website</p>
     <p>👉 Project 2: working on an another project to create some thing unexpected</p>
   </section>
+  <section class="section gallery">
+  <h2>My Photo Slideshow</h2>
+  <div class="slideshow-container">
+
+    <!-- Slide 1 -->
+    <div class="mySlides fade">
+      <img src="images/photo1.jpg" style="width:100%">
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="mySlides fade">
+      <img src="images/photo2.jpg" style="width:100%">
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="mySlides fade">
+      <img src="images/photo3.jpg" style="width:100%">
+    </div>
+
+    <!-- Next and Previous Buttons -->
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+  </div>
+  <br>
+
+  <!-- Dots -->
+  <div style="text-align:center">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+  </div>
+</section>
 
   <section class="section contact">
   <h2>Contact Me</h2>
@@ -111,9 +145,44 @@
   <footer>
     <p>© 2025 Gaurav | Made with ❤️ by gaurav for you</p>
   </footer>
+<script>
+let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+
+// Automatic Slideshow
+setInterval(() => {
+  plusSlides(1);
+}, 4000); // 4 second ke baad slide change hoga
+</script>
+
 </body>
 
 </html>
+
 
 
 
