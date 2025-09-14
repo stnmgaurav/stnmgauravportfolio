@@ -1,29 +1,149 @@
+/* General Styles */
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
   margin: 0;
   padding: 0;
+  color: #333;
 }
 
+/* Header */
 header {
   background-color: #333;
   color: white;
-  padding: 20px;
+  padding: 40px 20px;
   text-align: center;
 }
 
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+header p {
+  margin-top: 10px;
+  font-size: 1.2rem;
+}
+
+/* Sections */
+.section {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* About Section */
+.about img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 20px 0;
+  object-fit: cover;
+  border: 4px solid #333;
+}
+
+/* Projects Section */
+.projects p {
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+/* Buttons */
+.email-btn, .whatsapp-btn {
+  display: inline-block;
+  padding: 12px 25px;
+  margin: 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.email-btn {
+  background-color: #007BFF; /* Blue */
+  color: white;
+}
+
+.email-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.whatsapp-btn {
+  background-color: #25D366; /* WhatsApp green */
+  color: white;
+}
+
+.whatsapp-btn:hover {
+  background-color: #1da851;
+  transform: scale(1.05);
+}
+
+/* Slideshow */
+.slideshow-container {
+  position: relative;
+  max-width: 700px;
+  margin: auto;
+}
+
+.mySlides {
+  display: none;
+}
+
+.mySlides img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.3s;
+  user-select: none;
+  border-radius: 0 3px 3px 0;
+}
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.6);
+}
+
+/* Dots */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+.active, .dot:hover {
+  background-color: #333;
+}
+
+/* Footer */
 footer {
   background-color: red;
   color: white;
   text-align: center;
-  padding: 10px;
-}
-
-.whatsapp-btn {
-  display: inline-block;
-  background-color: green;
-  color: white;
-  padding: 10px 20px;
-  text-decoration: none;
-  border-radius: 5px;
+  padding: 15px;
+  font-size: 0.9rem;
 }
