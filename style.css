@@ -9,7 +9,7 @@ body {
 
 /* Header */
 header {
-  background-color: #333;
+  background-color: #87CEEB;
   color: white;
   padding: 40px 20px;
   text-align: center;
@@ -34,7 +34,7 @@ header p {
 .section h2 {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #222;
+  color: #FF0000;
 }
 
 /* About Section */
