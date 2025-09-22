@@ -3,31 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Nam Jap Counter</title>
-  <link rel="stylesheet" href="style.css">
   <style>
-    /* Additional styles specific to this page */
     body {
-      background-color: #fffde7;
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #333;
+      background-color: #fffde7;
       text-align: center;
-    }
-
-    header {
-      background: linear-gradient(to right, #FF0000, #FFA500);
-      color: white;
-      padding: 40px 20px;
+      padding: 40px;
     }
 
     h1 {
-      margin: 0;
+      color: #4e342e;
       font-size: 2.5rem;
-    }
-
-    .counter-section {
-      margin-top: 50px;
     }
 
     #japCount {
@@ -56,46 +42,40 @@
     .reset {
       background-color: #e57373;
     }
-
-    footer {
-      margin-top: 60px;
-      background: linear-gradient(to right, #0056B3, #87CEEB);
-      color: white;
-      padding: 15px;
-    }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>🕉️ Nam Jap Counter</h1>
-    <p>Tap to count your mantra repetitions</p>
-  </header>
-
-  <section class="counter-section">
-    <div id="japCount">0</div>
-    <button id="japTapBtn" class="counter-btn">Tap to Count</button>
-    <button id="japResetBtn" class="counter-btn reset">Reset</button>
-  </section>
-
-  <footer>
-    &copy; 2025 Naam Jap Counter | All Rights Reserved
-  </footer>
+  <h1>🕉️ Nam Jap Counter</h1>
+  <div id="japCount">0</div>
+  <button id="japTapBtn" class="counter-btn">Tap to Count</button>
+  <button id="japResetBtn" class="counter-btn reset">Reset</button>
 
   <script>
-    let japCount = localStorage.getItem('namJapCount') || 0;
+    // Load saved count from localStorage or set to 0
+    let japCount = parseInt(localStorage.getItem('namJapCount')) || 0;
 
     const countDisplay = document.getElementById('japCount');
     const tapBtn = document.getElementById('japTapBtn');
     const resetBtn = document.getElementById('japResetBtn');
 
+    // Display the count on page load
     countDisplay.textContent = japCount;
 
+    // Increase count on tap
     tapBtn.addEventListener('click', () => {
       japCount++;
       countDisplay.textContent = japCount;
       localStorage.setItem('namJapCount', japCount);
     });
 
+    // Reset the count
     resetBtn.addEventListener('click', () => {
-      jap
+      japCount = 0;
+      countDisplay.textContent = japCount;
+      localStorage.setItem('namJapCount', japCount);
+    });
+  </script>
+
+</body>
+</html>
