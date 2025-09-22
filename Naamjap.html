@@ -5,76 +5,129 @@
   <title>Nam Jap Counter</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
       background-color: #fffde7;
       text-align: center;
-      padding: 40px;
+      user-select: none;
+      height: 100vh;
+      overflow: hidden;
     }
 
     h1 {
+      margin-top: 30px;
       color: #4e342e;
-      font-size: 2.5rem;
     }
 
-    #japCount {
-      font-size: 72px;
-      font-weight: bold;
+    #circleContainer {
+      margin: 40px auto 20px;
+      width: 200px;
+      height: 200px;
+      position: relative;
+    }
+
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring__circle {
+      stroke: #4caf50;
+      stroke-width: 12;
+      fill: transparent;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+
+    #countDisplay {
+      font-size: 24px;
+      margin-top: 20px;
       color: #388e3c;
-      margin: 30px 0;
     }
 
-    .counter-btn {
-      background-color: #81c784;
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      margin: 10px;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s ease;
+    #cycleCount {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #d84315;
     }
 
-    .counter-btn:hover {
-      transform: scale(1.05);
-    }
-
-    .reset {
-      background-color: #e57373;
+    footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
     }
   </style>
 </head>
 <body>
 
   <h1>🕉️ Nam Jap Counter</h1>
-  <div id="japCount">0</div>
-  <button id="japTapBtn" class="counter-btn">Tap to Count</button>
-  <button id="japResetBtn" class="counter-btn reset">Reset</button>
+
+  <div id="circleContainer">
+    <svg class="progress-ring" width="200" height="200">
+      <circle
+        class="progress-ring__circle"
+        stroke="green"
+        stroke-width="12"
+        fill="transparent"
+        r="90"
+        cx="100"
+        cy="100"
+      />
+    </svg>
+  </div>
+
+  <div id="countDisplay">Jap: 0 / 108</div>
+  <div id="cycleCount">Cycles Completed: 0</div>
+
+  <footer>&copy; 2025 Naam Jap Counter</footer>
 
   <script>
-    // Load saved count from localStorage or set to 0
-    let japCount = parseInt(localStorage.getItem('namJapCount')) || 0;
+    const MAX_COUNT = 108;
+    let count = parseInt(localStorage.getItem("japCount")) || 0;
+    let cycles = parseInt(localStorage.getItem("japCycles")) || 0;
 
-    const countDisplay = document.getElementById('japCount');
-    const tapBtn = document.getElementById('japTapBtn');
-    const resetBtn = document.getElementById('japResetBtn');
+    const countDisplay = document.getElementById("countDisplay");
+    const cycleDisplay = document.getElementById("cycleCount");
 
-    // Display the count on page load
-    countDisplay.textContent = japCount;
+    // Circle animation setup
+    const circle = document.querySelector('.progress-ring__circle');
+    const radius = circle.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius;
 
-    // Increase count on tap
-    tapBtn.addEventListener('click', () => {
-      japCount++;
-      countDisplay.textContent = japCount;
-      localStorage.setItem('namJapCount', japCount);
-    });
+    circle.style.strokeDasharray = `${circumference}`;
+    circle.style.strokeDashoffset = `${circumference}`;
 
-    // Reset the count
-    resetBtn.addEventListener('click', () => {
-      japCount = 0;
-      countDisplay.textContent = japCount;
-      localStorage.setItem('namJapCount', japCount);
-    });
+    function setProgress(percent) {
+      const offset = circumference - (percent / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+    }
+
+    function updateDisplay() {
+      countDisplay.textContent = `Jap: ${count} / ${MAX_COUNT}`;
+      cycleDisplay.textContent = `Cycles Completed: ${cycles}`;
+      const progressPercent = (count / MAX_COUNT) * 100;
+      setProgress(progressPercent);
+    }
+
+    function incrementJap() {
+      count++;
+      if (count >= MAX_COUNT) {
+        count = 0;
+        cycles++;
+        localStorage.setItem("japCycles", cycles);
+      }
+      localStorage.setItem("japCount", count);
+      updateDisplay();
+    }
+
+    // On click/touch anywhere on screen
+    document.body.addEventListener("click", incrementJap);
+    document.body.addEventListener("touchstart", incrementJap);
+
+    // Initial load
+    updateDisplay();
   </script>
 
 </body>
