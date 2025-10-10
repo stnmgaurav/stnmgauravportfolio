@@ -3,62 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Nam Jap Counter</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #fffde7;
-      text-align: center;
-      user-select: none;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    h1 {
-      margin-top: 30px;
-      color: #4e342e;
-    }
-
-    #circleContainer {
-      margin: 40px auto 20px;
-      width: 200px;
-      height: 200px;
-      position: relative;
-    }
-
-    .progress-ring {
-      transform: rotate(-90deg);
-    }
-
-    .progress-ring__circle {
-      stroke: #4caf50;
-      stroke-width: 12;
-      fill: transparent;
-      transition: stroke-dashoffset 0.3s ease;
-    }
-
-    #countDisplay {
-      font-size: 24px;
-      margin-top: 20px;
-      color: #388e3c;
-    }
-
-    #cycleCount {
-      font-size: 20px;
-      margin-top: 10px;
-      color: #d84315;
-    }
-
-    footer {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #888;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -76,10 +22,15 @@
         cy="100"
       />
     </svg>
+
+    <!-- Mantra text (user can change this) -->
+    <div id="mantra"></div>
   </div>
 
   <div id="countDisplay">Jap: 0 / 108</div>
   <div id="cycleCount">Cycles Completed: 0</div>
+
+  <button id="changeMantraButton">Change Mantra</button>
 
   <footer>&copy; 2025 Naam Jap Counter</footer>
 
@@ -90,6 +41,11 @@
 
     const countDisplay = document.getElementById("countDisplay");
     const cycleDisplay = document.getElementById("cycleCount");
+    const mantraDisplay = document.getElementById("mantra");
+
+    // Load saved mantra or default
+    let mantra = localStorage.getItem("userMantra") || "ॐ नमः शिवाय";
+    mantraDisplay.textContent = mantra;
 
     // Circle animation setup
     const circle = document.querySelector('.progress-ring__circle');
@@ -112,6 +68,7 @@
     }
 
     function incrementJap() {
+      if (navigator.vibrate) navigator.vibrate(50); // vibration
       count++;
       if (count >= MAX_COUNT) {
         count = 0;
@@ -121,6 +78,16 @@
       localStorage.setItem("japCount", count);
       updateDisplay();
     }
+
+    // Change Mantra Function
+    document.getElementById("changeMantraButton").addEventListener("click", () => {
+      const newMantra = prompt("Enter your mantra:", mantra);
+      if (newMantra !== null && newMantra.trim() !== "") {
+        mantra = newMantra.trim();
+        localStorage.setItem("userMantra", mantra);
+        mantraDisplay.textContent = mantra;
+      }
+    });
 
     // On click/touch anywhere on screen
     document.body.addEventListener("click", incrementJap);
