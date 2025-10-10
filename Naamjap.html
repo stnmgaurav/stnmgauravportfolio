@@ -15,7 +15,7 @@
     <svg class="progress-ring" width="200" height="200">
       <circle
         class="progress-ring__circle"
-        stroke="green"
+        stroke="ff9800"
         stroke-width="12"
         fill="transparent"
         r="90"
@@ -33,7 +33,7 @@
 
   <button id="changeMantraButton">Change Mantra</button>
 
-  <footer>&copy; 2025 Naam Jap Counter</footer>
+  <footer>&copy; 2025 Naam Jap Counter by Gaurav</footer>
 
   <script>
     const MAX_COUNT = 108;
@@ -91,8 +91,11 @@
     });
 
     // On click/touch anywhere on screen
-    document.body.addEventListener("click", incrementJap);
-    document.body.addEventListener("touchstart", incrementJap);
+    document.body.addEventListener("pointerdown", (e) => {
+  e.preventDefault(); // helps prevent accidental zoom or text selection
+  navigator.vibrate?.(50); // short vibration on tap
+  incrementJap();
+});
 
     // Initial load
     updateDisplay();
