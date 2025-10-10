@@ -1,4 +1,6 @@
-/* General Styles */
+/* ----------------------------------------- */
+/* General Website Styles                    */
+/* ----------------------------------------- */
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
@@ -147,36 +149,96 @@ footer {
   padding: 15px;
   font-size: 0.9rem;
 }
-/* Nam Jap Counter Styles */
-.counter {
+
+/* ----------------------------------------- */
+/* Nam Jap Counter Page Styles               */
+/* ----------------------------------------- */
+
+body.namjap-page {
   background-color: #fffde7;
-  border-top: 4px solid #fbc02d;
-  border-bottom: 4px solid #fbc02d;
+  color: #4e342e;
+  text-align: center;
+  user-select: none;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  /* ✅ Center everything vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-#japCount {
-  font-size: 72px;
-  font-weight: bold;
+body.namjap-page h1 {
+  margin-bottom: 20px;
+  color: #4e342e;
+}
+
+#circleContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 10px auto;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring__circle {
+  stroke: #4caf50;
+  stroke-width: 12;
+  fill: transparent;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+/* ✅ Centered mantra text */
+#mantra {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  color: #4e342e;
+  pointer-events: none; /* ensures taps still increment count */
+}
+
+#countDisplay {
+  font-size: 24px;
+  margin-top: 20px;
   color: #388e3c;
-  margin: 30px 0;
 }
 
-.counter-btn {
-  background-color: #81c784;
+#cycleCount {
+  font-size: 20px;
+  margin-top: 10px;
+  color: #d84315;
+}
+
+/* ✅ Change Mantra Button */
+#changeMantraButton {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #4caf50;
   color: white;
   border: none;
-  padding: 15px 30px;
-  margin: 10px;
-  font-size: 18px;
   border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  font-size: 16px;
 }
 
-.counter-btn:hover {
-  transform: scale(1.05);
+#changeMantraButton:hover {
+  background-color: #388e3c;
 }
 
-.counter-btn.reset {
-  background-color: #e57373;
+/* ✅ Footer for Naam Jap (lighter) */
+body.namjap-page footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
+  background: none;
 }
