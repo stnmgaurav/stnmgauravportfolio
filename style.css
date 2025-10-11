@@ -9,19 +9,19 @@ body {
 /* Header */
 header {
   background: linear-gradient(to right, #b3e5fc, #81d4fa);
-  color: white;
-  padding: 40px 20px;
+  color: #0D47A1;
+  padding: 25px 20px;
   text-align: center;
 }
 
 header h1 {
   margin: 0;
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 header p {
-  margin-top: 10px;
-  font-size: 1.2rem;
+  margin-top: 8px;
+  font-size: 1rem;
 }
 
 /* Sections */
@@ -147,10 +147,7 @@ footer {
   font-size: 0.9rem;
 }
 
-/* ----------------------------------------- */
-/* Nam Jap Counter Page Styles               */
-/* ----------------------------------------- */
-
+/* Nam Jap Counter Page Styles */
 body.namjap-page {
   background-color: #e0f7fa;
   color: #4e342e;
@@ -229,9 +226,7 @@ body.namjap-page h1 {
 }
 
 #changeMantraButton:hover {
-  background-color: #33CCFF; /* Slightly lighter on hover */
-  box-shadow: 0 0 20px #33CCFF, 0 0 40px #33CCFF, 0 0 80px #33CCFF;
-  transform: scale(1.05);
+  background-color: #33CCFF;
 }
 
 /* Footer for Naam Jap (lighter) */
@@ -242,5 +237,16 @@ body.namjap-page footer {
   text-align: center;
   font-size: 0.9rem;
   color: #888;
-  background: none;
+  background:linear-gradient(90deg, #00BFFF, #4CAF50, #FFEB3B, #FF9800, #E91E63);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  background-size: 400% 400%;
+  animation: gradientFlow 8s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
