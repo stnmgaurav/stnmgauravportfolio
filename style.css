@@ -9,7 +9,6 @@ body {
 /* Header */
 header {
   background: linear-gradient(to right, #b3e5fc, #81d4fa);
-  color: white;
   padding: 25px 20px;
   text-align: center;
 }
@@ -17,6 +16,7 @@ header {
 header h1 {
   margin: 0;
   font-size: 2rem;
+  colour:white;
 }
 
 header p {
