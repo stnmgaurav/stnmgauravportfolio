@@ -9,7 +9,7 @@
 <body>
 
   <body class="namjap-page">
-  <h1>🕉️ Nam Jap Counter</h1>
+  <h1>🕉️ Naam Jap Counter</h1>
 
   <div id="circleContainer">
     <svg class="progress-ring" width="200" height="200">
@@ -30,7 +30,7 @@
   </div>
 
   <div id="countDisplay">Jap: 0 / 108</div>
-  <div id="cycleCount">Cycles Completed: 0</div>
+  <div id="cycleCount">Total mala Completed: 0</div>
 
   <button id="changeMantraButton">Change Mantra</button>
 
@@ -64,7 +64,7 @@
 
     function updateDisplay() {
       countDisplay.textContent = `Jap: ${count} / ${MAX_COUNT}`;
-      cycleDisplay.textContent = `Cycles Completed: ${cycles}`;
+      cycleDisplay.textContent = `Total mala Completed: ${cycles}`;
       const progressPercent = (count / MAX_COUNT) * 100;
       setProgress(progressPercent);
     }
