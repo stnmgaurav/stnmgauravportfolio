@@ -178,6 +178,10 @@ body.namjap-page h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: transparent;
+  overflow: visible; /* important! */
+  background: radial-gradient(circle, rgba(255,152,0,0.25) 0%, transparent 70%);
+  border-radius: 50%;
 }
 
 .progress-ring__circle {
@@ -196,7 +200,7 @@ body.namjap-page h1 {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 20px;
-  color: #4e342e;
+  color: #fff3e0;
   pointer-events: none; /* ensures taps still increment count */
 }
 
