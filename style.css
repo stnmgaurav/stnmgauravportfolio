@@ -172,8 +172,8 @@ body.namjap-page h1 {
 
 #circleContainer {
   margin: 40px auto 20px;
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -199,8 +199,8 @@ body.namjap-page h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 20px;
-  color: #fff3e0;
+  font-size: 22px;
+  color: #4e342e;
   pointer-events: none; /* ensures taps still increment count */
 }
 
