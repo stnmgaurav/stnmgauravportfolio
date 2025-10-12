@@ -9,6 +9,7 @@ body {
 /* Header */
 header {
   background: linear-gradient(to right, #b3e5fc, #81d4fa);
+  colour: white;
   padding: 25px 20px;
   text-align: center;
 }
@@ -16,13 +17,11 @@ header {
 header h1 {
   margin: 0;
   font-size: 2rem;
-  colour:white !important;
 }
 
 header p {
   margin-top: 8px;
   font-size: 1rem;
-  colour: #ff9800 !important;
 }
 
 /* Sections */
@@ -172,8 +171,8 @@ body.namjap-page h1 {
 
 #circleContainer {
   margin: 40px auto 20px;
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -184,24 +183,33 @@ body.namjap-page h1 {
   border-radius: 50%;
 }
 
-.progress-ring__circle {
-  stroke: #ff9800;
-  stroke-width: 12;
-  fill: transparent;
-  transition: stroke-dashoffset 0.3s ease;
-  filter: drop-shadow(0 0 10px #ffb300) drop-shadow(0 0 20px #ff9800);
+.progress-ring {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%; /* 👈 ensures full round */
+  background: radial-gradient(circle, rgba(255,140,0,0.3) 0%, transparent 70%);
 }
 
+.progress-ring__circle {
+  stroke: #ff6f00; /* bhagwa/orange color */
+  stroke-width: 10;
+  fill: none;
+  filter: drop-shadow(0 0 10px #ff8f00); /* soft glow */
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
 
-/* Centered mantra text */
-#mantra {
+#mantraText {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   font-size: 22px;
-  color: #4e342e;
-  pointer-events: none; /* ensures taps still increment count */
+  font-weight: bold;
+  color: #4e342e; /* dark brown text inside circle */
+  text-shadow: 0 0 8px rgba(255, 200, 0, 0.8); /* glowing text effect */
 }
 
 #countDisplay {
