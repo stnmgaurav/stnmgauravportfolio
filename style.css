@@ -206,10 +206,14 @@ body.namjap-page h1 {
 
 #mantraText {
   position: absolute;
-  font-size: 22px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* exact center */
+  font-size: 24px;
   font-weight: bold;
-  color: #4e342e; /* dark brown text inside circle */
-  text-shadow: 0 0 8px rgba(255, 200, 0, 0.8); /* glowing text effect */
+  color: #4e342e;
+  text-shadow: 0 0 8px rgba(255, 200, 0, 0.8);
+  text-align: center;
 }
 
 #countDisplay {
@@ -244,8 +248,8 @@ body.namjap-page h1 {
 
 /* Footer for Naam Jap (lighter) */
 body.namjap-page footer {
-  position: absolute;
-  bottom: 10px;
+  position: relative;
+  bottom: 0;
   width: 100%;
   text-align: center;
   font-size: 0.9rem;
