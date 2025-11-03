@@ -14,9 +14,9 @@
     /* Default font set to Inter */
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f0f4f8; /* Light blue/gray background */
+      background-color: #f8fafc; /* Light blue/gray background */
       padding-top: 4rem; /* Fixed header ke liye space */
-      color: #334155;
+      color: #ef4444;
     }
 
     /* Slideshow container */
@@ -71,7 +71,7 @@
     }
 
     .active, .dot:hover {
-      background-color: #1e40af; /* Dark blue active color */
+      background-color: #ff7f7f; /* light red active color */
     }
 
     /* Fading animation */
@@ -207,22 +207,27 @@
     <section class="section contact bg-white p-8 rounded-xl shadow-lg text-center" id="contact">
       <h2 class="text-3xl font-bold text-blue-800 mb-6 border-b pb-2">Contact Me</h2>
       <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-        <a class="email-btn px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-300 transform hover:scale-105" 
+        <a class="email-btn px-4 py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-300 transform hover:scale-105" 
            href="mailto:gauravsinghrajpoot2019@gmail.com" 
-           target="_blank">
-          Send Email
-        </a>
-        <a class="whatsapp-btn px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300 transform hover:scale-105" 
+     target="_blank"
+  >
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Gmail" class="w-6 h-6 filter brightness-0 invert">
+    <span>Send Email</span>
+  </a>
+
+        <a class="whatsapp-btn px-4 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-500 transition duration-300 transform hover:scale-105" 
            href="https://wa.me/916388778495?text=Hello%20Gaurav,%20I%20want%20to%20contact%20you" 
-           target="_blank">
-          Send WhatsApp Message
-        </a>
-      </div>
+    target="_blank"
+  >
+    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" alt="WhatsApp" class="w-6 h-6 filter brightness-0 invert">
+    <span>WhatsApp</span>
+  </a>
+</div>
     </section>
   </main>
 
-  <footer class="text-center py-6 bg-gray-800 text-gray-300 text-sm mt-12">
-    <p>© 2025 Gaurav | Made with <span class="text-red-500">❤️</span> by Gaurav for you</p>
+  <footer class="text-center py-6 bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 text-gray-800 text-sm mt-12 shadow-inner">
+    <p>© 2025 Gaurav | Made with <span class="text-red-500">❤️</span> by Gaurav </p>
   </footer>
 
   <script>
@@ -281,10 +286,10 @@
       dots[slideIndex-1].className += " active";
     }
 
-    // Automatic Slideshow (5 seconds interval)
+    // Automatic Slideshow (3 seconds interval)
     setInterval(() => {
       plusSlides(1);
-    }, 5000); // 2000ms se badha kar 5000ms (5 seconds) kiya, taaki user ko time mil sake.
+    }, 3000);
   </script>
 </body>
 </html>
