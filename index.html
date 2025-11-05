@@ -19,15 +19,30 @@
       color: #ef4444;
     }
 
-    /* Slideshow container */
-    .slideshow-container {
-      max-width: 100%;
-      position: relative;
-      margin: auto;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    }
+   /* --- Slideshow container (Updated Stable Version) --- */
+.slideshow-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;       /* Fixed ratio for stable height */
+  position: relative;
+  margin: auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f0f4f8;        /* Light background for smaller images */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+   .mySlides img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;         /* Full image visible, no cropping */
+  background-color: #FFFFFF;
+}
+
+@media (max-width: 768px) {
+  .slideshow-container {
+    aspect-ratio: 4 / 3;       /* Mobile view adjustment */
+  }
+}
 
     /* Next & previous buttons */
     .prev, .next {
