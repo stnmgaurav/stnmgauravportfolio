@@ -219,15 +219,10 @@ body.namjap-page h1 {
 
 /* Count Display */
 #countDisplay {
-  margin-top: 10px;
-  padding: 10px 18px;
-  background-color: #00BFFF;
-  color: #388e3c;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
   font-size: 20px;
-  box-shadow: 0 0 10px #00BFFF, 0 0 10px #00BFFF, 0 0 10px #00BFFF;
+  margin-top: 10px;
+  color: #33e3f;
+}
 
 #cycleCount {
   font-size: 20px;
