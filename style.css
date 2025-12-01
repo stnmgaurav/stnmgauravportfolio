@@ -210,20 +210,24 @@ body.namjap-page h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 30px;
+  font-size: 22px;
   font-weight: bold;
   color: #4e342e;
-  text-align: center;
   text-shadow: 0 0 8px rgba(255, 200, 0, 0.8);
-  white-space: nowrap;
+  text-align: center;
 }
 
 /* Count Display */
 #countDisplay {
-  font-size: 24px;
-  margin-top: 20px;
+  margin-top: 10px;
+  padding: 10px 18px;
+  background-color: #00BFFF;
   color: #388e3c;
-}
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 0 0 10px #00BFFF, 0 0 10px #00BFFF, 0 0 10px #00BFFF;
 
 #cycleCount {
   font-size: 20px;
