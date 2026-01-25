@@ -1,188 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Nam Jap Counter</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8">
+  <title>Nam Jap Counter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    :root {
+      --primary: #ff9800;
+      --bg: #121212;
+      --card-bg: rgba(255, 255, 255, 0.07);
+      --modal-bg: #1e1e1e;
+    }
 
-<style>
-:root{
-  --primary:#ff9800;
-  --bg:#121212;
-  --card-bg:rgba(255,255,255,.07);
-  --modal-bg:#1e1e1e;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Segoe UI',system-ui,sans-serif;
-  background:var(--bg);
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  min-height:100vh;
-  overflow: hidden; 
-  /* Puri screen ko touch-friendly banane ke liye */
-  touch-action: none; 
-}
-.app-container{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding-top:40px;
-  width: 100%;
-  pointer-events: none; /* Isse tap seedha body par jayega */
-}
-/* Buttons aur Interactive elements ko clickable banana zaroori hai */
-.button-stack, .modal, #openMantraModal, #resetBtn, #closeModal, .mantra-option {
-  pointer-events: auto;
-}
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background-color: var(--bg);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      touch-action: manipulation;
+    }
 
-h1 { color:var(--primary); font-weight:300; letter-spacing:3px; margin-bottom:20px; font-size:1.1rem; }
+    .app-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 40px;
+      width: 100%;
+    }
 
-#circleContainer{
-  position:relative;
-  margin-bottom:25px;
-}
-#mantraText{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-size:1.1rem;
-  font-weight: 500;
-  padding: 20px;
-}
-.stats-card{
-  background:var(--card-bg);
-  padding:20px;
-  border-radius:24px;
-  width:90%;
-  max-width:340px;
-  text-align:center;
-  border:1px solid rgba(255,255,255,.1);
-}
-#countDisplay{ font-size:3.5rem; font-weight:800; color:var(--primary); line-height: 1; }
-.label{ font-size:.7rem; opacity:.5; letter-spacing:1px; margin-top: 5px; }
+    h1 {
+      font-weight: 300; letter-spacing: 3px;
+      margin: 0 0 20px 0; color: var(--primary);
+      font-size: 1.1rem;
+    }
 
-.grid-stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  margin-top:20px;
-  padding-top:15px;
-  border-top:1px solid rgba(255,255,255,.1);
-}
-.button-stack{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  margin:30px 0;
-  width:90%;
-  max-width:340px;
-}
-button{ padding:16px; border:none; border-radius:16px; font-size:1rem; font-weight:600; cursor:pointer; }
-.btn-main{background:var(--primary);color:#000}
-.btn-outline{ background:rgba(255,255,255,.05); color:#fff; border:1px solid rgba(255,255,255,.1); }
-button:active{transform:scale(.96)}
+    #circleContainer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+      cursor: pointer;
+    }
 
-#modalOverlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:100;
-  backdrop-filter: blur(4px);
-  pointer-events: auto;
-}
-.modal{
-  background:var(--modal-bg);
-  width:85%;
-  max-width:350px;
-  padding:25px;
-  border-radius:25px;
-  border:1px solid var(--primary);
-  text-align:center;
-}
-.mantra-option{
-  width:100%; padding:14px; margin:8px 0; border-radius:12px;
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-  color:#fff; cursor:pointer;
-}
-footer{ padding:20px; font-size:.7rem; opacity:.4; text-align:center; }
+    #mantra {
+      position: absolute;
+      font-size: 1.2rem;
+      text-align: center;
+      width: 150px;
+      pointer-events: none;
+      font-weight: 500;
+      line-height: 1.4;
+    }
 
-.progress-ring__circle{
-  transform:rotate(-90deg);
-  transform-origin:50% 50%;
-  transition:stroke-dashoffset .3s ease;
-}
-</style>
+    .stats-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 24px;
+      width: 90%;
+      max-width: 340px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    #countDisplay { font-size: 3.5rem; font-weight: 800; color: var(--primary); margin: 0; line-height: 1; }
+    .label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 1px; margin-top: 5px; }
+
+    .grid-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .button-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 30px 0;
+      width: 90%;
+      max-width: 340px;
+    }
+
+    button {
+      padding: 16px; border: none; border-radius: 16px;
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    .btn-main { background: var(--primary); color: #000; }
+    .btn-outline { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+    button:active { transform: scale(0.96); }
+
+    /* Modal Styling */
+    #modalOverlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); display: none;
+      justify-content: center; align-items: center; z-index: 100;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal {
+      background: var(--modal-bg);
+      width: 85%; max-width: 350px;
+      padding: 25px; border-radius: 25px;
+      text-align: center; border: 1px solid var(--primary);
+    }
+
+    .mantra-option {
+      width: 100%; padding: 14px; margin: 8px 0;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; border-radius: 12px; cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .mantra-option:hover { background: var(--primary); color: #000; }
+
+    footer {
+      padding: 20px; font-size: 0.7rem; opacity: 0.4;
+      text-align: center; width: 100%;
+    }
+
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.3s ease-out;
+      transform: rotate(-90deg); transform-origin: 50% 50%;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="app-container">
-  <h1>NAM JAP</h1>
+  <div class="app-container">
+    <h1>NAM JAP</h1>
 
-  <div id="circleContainer">
-    <svg width="220" height="220">
-      <circle stroke="rgba(255,255,255,.05)" stroke-width="12" fill="transparent" r="95" cx="110" cy="110"/>
-      <circle id="progressCircle" stroke="var(--primary)" stroke-width="12" stroke-linecap="round" fill="transparent" r="95" cx="110" cy="110" class="progress-ring__circle"/>
-    </svg>
-    <div id="mantraText">राधा</div>
-  </div>
+    <div id="circleContainer">
+      <svg width="220" height="220">
+        <circle stroke="rgba(255,255,255,0.05)" stroke-width="12" fill="transparent" r="95" cx="110" cy="110"/>
+        <circle id="progressCircle" stroke="var(--primary)" stroke-width="12" stroke-linecap="round" fill="transparent" r="95" cx="110" cy="110" class="progress-ring__circle"/>
+      </svg>
+      <div id="mantra">राधा</div>
+    </div>
 
-  <div class="stats-card">
-    <div id="countDisplay">0</div>
-    <div class="label">Mala Progress (108)</div>
-
-    <div class="grid-stats">
-      <div>
-        <div id="cycleCountVal" style="font-size:1.3rem;font-weight:bold">0</div>
-        <div class="label">Malas</div>
+    <div class="stats-card">
+      <div id="countDisplay">0</div>
+      <div class="label">Mala Progress (108)</div>
+      
+      <div class="grid-stats">
+        <div>
+          <div id="cycleCount" style="font-size: 1.3rem; font-weight: bold;">0</div>
+          <div class="label">Malas</div>
+        </div>
+        <div>
+          <div id="totalCount" style="font-size: 1.3rem; font-weight: bold;">0</div>
+          <div class="label">Total Jap</div>
+        </div>
       </div>
-      <div>
-        <div id="totalCountVal" style="font-size:1.3rem;font-weight:bold">0</div>
-        <div class="label">Total Jap</div>
-      </div>
+    </div>
+
+    <div class="button-stack">
+      <button class="btn-main" id="openMantraModal">Change Mantra</button>
+      <button class="btn-outline" id="resetBtn">Reset Session</button>
     </div>
   </div>
 
-  <div class="button-stack">
-    <button class="btn-main" id="openMantraModal">Change Mantra</button>
-    <button class="btn-outline" id="resetBtn">Reset Session</button>
+  <div id="modalOverlay">
+    <div class="modal">
+      <h2 style="margin-top:0; color:var(--primary); font-size: 1.3rem;">Choose Mantra</h2>
+      <div id="mantraList"></div>
+      <button class="btn-outline" style="margin-top:15px; width:100%;" id="closeModal">Cancel</button>
+    </div>
   </div>
-</div>
 
-<div id="modalOverlay">
-  <div class="modal">
-    <h2 style="color:var(--primary); margin-top: 0;">Choose Mantra</h2>
-    <div id="mantraList"></div>
-    <button class="btn-outline" id="closeModal" style="width:100%; margin-top: 10px;">Cancel</button>
-  </div>
-</div>
+  <footer>©2026 NAAM JAP COUNTER BY GAURAV</footer>
 
-<footer>©2026 NAAM JAP COUNTER BY GAURAV</footer>
+  <script>
+    const MAX = 108;
+    const premadeMantras = [
+      "राधा",
+      "ॐ नमो भगवते वासुदेवाय",
+      "हरे कृष्ण",
+      "ॐ नमः शिवाय",
+      "ॐ गण गणपतये नमः",
+      "श्री राम जय राम",
+      "Custom (Type your own)"
+    ];
 
-<script>
-const MAX=108;
-const mantras=["राधा","ॐ नमो भगवते वासुदेवाय","हरे कृष्ण","ॐ नमः शिवाय","ॐ गण गणपतये नमः","श्री राम जय राम","Custom (Type your own)"];
+    let count = parseInt(localStorage.getItem("japCount")) || 0;
+    let cycles = parseInt(localStorage.getItem("japCycles")) || 0;
+    let total = parseInt(localStorage.getItem("japTotal")) || 0;
+    let mantra = localStorage.getItem("userMantra") || premadeMantras[0];
 
-let count=+localStorage.getItem("japCount")||0;
-let cycles=+localStorage.getItem("japCycles")||0;
-let total=+localStorage.getItem("japTotal")||0;
-let mantra=localStorage.getItem("userMantra")||mantras[0];
+    const circle = document.getElementById("progressCircle");
+    const radius = circle.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius;
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
 
-const circle=document.getElementById("progressCircle");
-const r=circle.r.baseVal.value;
-const c=2*Math.PI*r;
-circle.style.strokeDasharray=`${c} ${c}`;
-
-let audioCtx=null;
+    let audioCtx=null;
 
 function playBell(){
  try {
@@ -198,81 +219,90 @@ function playBell(){
  } catch(e) {}
 }
 
-function updateUI(){
- document.getElementById("countDisplay").textContent=count;
- document.getElementById("cycleCountVal").textContent=cycles;
- document.getElementById("totalCountVal").textContent=total;
- document.getElementById("mantraText").textContent=mantra;
- circle.style.strokeDashoffset=c-(count/MAX)*c;
-}
-
-function increment(){
- if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
- count++; total++;
- if(count>=MAX){
-  count=0; cycles++;
-  if(navigator.vibrate) navigator.vibrate([150,50,150]);
-  playBell();
- } else {
-  if(navigator.vibrate) navigator.vibrate(50);
- }
- localStorage.setItem("japCount",count);
- localStorage.setItem("japCycles",cycles);
- localStorage.setItem("japTotal",total);
- updateUI();
-}
-
-// FULL SCREEN TAP LOGIC
-document.body.addEventListener("pointerdown", (e) => {
-    // Check agar click modal, button ya mantra list par toh nahi hai
-    const isButton = e.target.closest('button');
-    const isModal = e.target.closest('.modal');
-    const isOverlay = e.target === document.getElementById('modalOverlay');
-
-    if(!isButton && !isModal && !isOverlay) {
-        increment();
+    function updateUI() {
+      document.getElementById("countDisplay").textContent = count;
+      document.getElementById("cycleCount").textContent = cycles;
+      document.getElementById("totalCount").textContent = total;
+      document.getElementById("mantra").textContent = mantra;
+      const offset = circumference - (count / MAX) * circumference;
+      circle.style.strokeDashoffset = offset;
     }
-});
 
-// Modal Logic
-document.getElementById("openMantraModal").onclick=(e)=>{
- e.stopPropagation();
- document.getElementById("modalOverlay").style.display="flex";
- const list = document.getElementById("mantraList");
- list.innerHTML="";
- mantras.forEach(m=>{
-  const b=document.createElement("button");
-  b.className="mantra-option";
-  b.textContent=m;
-  b.onclick=(e)=>{
-   e.stopPropagation();
-   if(m.includes("Custom")){
-    const x=prompt("Enter your mantra");
-    if(x && x.trim() !== "") mantra=x.trim();
-   }else mantra=m;
-   localStorage.setItem("userMantra",mantra);
-   document.getElementById("modalOverlay").style.display="none";
-   updateUI();
-  };
-  list.appendChild(b);
- });
-};
+    function triggerVibration(type) {
+      if (navigator.vibrate) {
+        type === 'mala' ? navigator.vibrate([150, 50, 150]) : navigator.vibrate(50);
+      }
+    }
 
-document.getElementById("closeModal").onclick=()=>document.getElementById("modalOverlay").style.display="none";
+    function increment() {
+      count++; total++;
+      if (count >= MAX) { 
+        count = 0; 
+        cycles++; 
+        triggerVibration('mala'); 
+      } else { 
+        triggerVibration('tap'); 
+      }
+      localStorage.setItem("japCount", count);
+      localStorage.setItem("japCycles", cycles);
+      localStorage.setItem("japTotal", total);
+      updateUI();
+    }
 
-document.getElementById("resetBtn").onclick=(e)=>{
- e.stopPropagation();
- if(confirm("Reset all counts?")){
-  count=0; cycles=0; total=0;
-  localStorage.setItem("japCount", 0);
-  localStorage.setItem("japCycles", 0);
-  localStorage.setItem("japTotal", 0);
-  updateUI();
- }
-};
+    const modal = document.getElementById("modalOverlay");
+    const mantraList = document.getElementById("mantraList");
 
-updateUI();
-</script>
+    document.getElementById("openMantraModal").addEventListener("click", (e) => {
+      e.stopPropagation();
+      modal.style.display = "flex";
+      renderMantraOptions();
+    });
 
+    document.getElementById("closeModal").addEventListener("click", () => modal.style.display = "none");
+
+    function renderMantraOptions() {
+      mantraList.innerHTML = "";
+      premadeMantras.forEach(m => {
+        const btn = document.createElement("button");
+        btn.className = "mantra-option";
+        btn.textContent = m;
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          if (m.includes("Custom")) {
+            const custom = prompt("Enter your mantra:");
+            if (custom && custom.trim() !== "") setMantra(custom.trim());
+          } else {
+            setMantra(m);
+          }
+          modal.style.display = "none";
+        };
+        mantraList.appendChild(btn);
+      });
+    }
+
+    function setMantra(newMantra) {
+      mantra = newMantra;
+      localStorage.setItem("userMantra", mantra);
+      updateUI();
+    }
+
+    // Use pointerup for broader mobile support and to prevent accidental double-taps
+    document.body.addEventListener("pointerup", (e) => {
+      if (e.target.tagName !== 'BUTTON' && modal.style.display !== "flex") {
+        increment();
+      }
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      if(confirm("Reset all counts? This will clear your lifetime total too.")) {
+        count = 0; cycles = 0; total = 0;
+        localStorage.clear();
+        updateUI();
+      }
+    });
+
+    updateUI();
+  </script>
 </body>
 </html>
