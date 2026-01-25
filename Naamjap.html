@@ -21,6 +21,7 @@ body{
   display:flex;
   flex-direction:column;
   min-height:100vh;
+  overflow: hidden; /* Mobile bounce effect rokne ke liye */
 }
 .app-container{
   flex:1;
@@ -28,6 +29,7 @@ body{
   flex-direction:column;
   align-items:center;
   padding-top:40px;
+  width: 100%;
 }
 h1{
   color:var(--primary);
@@ -40,16 +42,20 @@ h1{
   position:relative;
   cursor:pointer;
   margin-bottom:25px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
-#mantra{
+#mantraText{
   position:absolute;
   inset:0;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  font-size:1.2rem;
+  font-size:1.1rem;
   pointer-events:none;
+  padding: 20px;
+  line-height: 1.4;
 }
 .stats-card{
   background:var(--card-bg);
@@ -64,6 +70,7 @@ h1{
   font-size:3.5rem;
   font-weight:800;
   color:var(--primary);
+  line-height: 1;
 }
 .label{
   font-size:.7rem;
@@ -92,8 +99,220 @@ button{
   font-size:1rem;
   font-weight:600;
   cursor:pointer;
+  transition: transform 0.1s;
 }
 .btn-main{background:var(--primary);color:#000}
 .btn-outline{
   background:rgba(255,255,255,.05);
-  color:#fff
+  color:#fff;
+  border:1px solid rgba(255,255,255,.1);
+}
+button:active{transform:scale(.96)}
+#modalOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  backdrop-filter: blur(4px);
+}
+.modal{
+  background:var(--modal-bg);
+  width:85%;
+  max-width:350px;
+  padding:25px;
+  border-radius:25px;
+  border:1px solid var(--primary);
+  text-align:center;
+}
+.mantra-option{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border-radius:12px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  color:#fff;
+  cursor:pointer;
+  text-align: center;
+}
+.mantra-option:hover{
+  background:var(--primary);
+  color:#000;
+}
+footer{
+  padding:20px;
+  font-size:.7rem;
+  opacity:.4;
+  text-align:center;
+}
+.progress-ring__circle{
+  transform:rotate(-90deg);
+  transform-origin:50% 50%;
+  transition:stroke-dashoffset .3s ease;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app-container">
+  <h1>NAM JAP</h1>
+
+  <div id="circleContainer">
+    <svg width="220" height="220">
+      <circle stroke="rgba(255,255,255,.05)" stroke-width="12"
+        fill="transparent" r="95" cx="110" cy="110"/>
+      <circle id="progressCircle" stroke="var(--primary)" stroke-width="12"
+        stroke-linecap="round" fill="transparent"
+        r="95" cx="110" cy="110" class="progress-ring__circle"/>
+    </svg>
+    <div id="mantraText">राधा</div>
+  </div>
+
+  <div class="stats-card">
+    <div id="countDisplay">0</div>
+    <div class="label">Mala Progress (108)</div>
+
+    <div class="grid-stats">
+      <div>
+        <div id="cycleCountVal" style="font-size:1.3rem;font-weight:bold">0</div>
+        <div class="label">Malas</div>
+      </div>
+      <div>
+        <div id="totalCountVal" style="font-size:1.3rem;font-weight:bold">0</div>
+        <div class="label">Total Jap</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-stack">
+    <button class="btn-main" id="openMantraModal">Change Mantra</button>
+    <button class="btn-outline" id="resetBtn">Reset Session</button>
+  </div>
+</div>
+
+<div id="modalOverlay">
+  <div class="modal">
+    <h2 style="color:var(--primary); margin-top: 0;">Choose Mantra</h2>
+    <div id="mantraList"></div>
+    <button class="btn-outline" id="closeModal" style="width:100%; margin-top: 10px;">Cancel</button>
+  </div>
+</div>
+
+<footer>©2026 NAAM JAP COUNTER BY GAURAV</footer>
+
+<script>
+const MAX=108;
+const mantras=[
+ "राधा","ॐ नमो भगवते वासुदेवाय","हरे कृष्ण",
+ "ॐ नमः शिवाय","ॐ गण गणपतये नमः","श्री राम जय राम",
+ "Custom (Type your own)"
+];
+
+let count=+localStorage.getItem("japCount")||0;
+let cycles=+localStorage.getItem("japCycles")||0;
+let total=+localStorage.getItem("japTotal")||0;
+let mantra=localStorage.getItem("userMantra")||mantras[0];
+
+const circle=document.getElementById("progressCircle");
+const r=circle.r.baseVal.value;
+const c=2*Math.PI*r;
+circle.style.strokeDasharray=`${c} ${c}`;
+
+let audioCtx=null;
+
+function playBell(){
+ try {
+  if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  
+  const o=audioCtx.createOscillator();
+  const g=audioCtx.createGain();
+  o.type="sine";
+  o.frequency.value=880;
+  g.gain.setValueAtTime(.5,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.01,audioCtx.currentTime+1);
+  o.connect(g); g.connect(audioCtx.destination);
+  o.start(); o.stop(audioCtx.currentTime+1);
+ } catch(e) { console.error("Audio error", e); }
+}
+
+function updateUI(){
+ document.getElementById("countDisplay").textContent=count;
+ document.getElementById("cycleCountVal").textContent=cycles;
+ document.getElementById("totalCountVal").textContent=total;
+ document.getElementById("mantraText").textContent=mantra;
+ circle.style.strokeDashoffset=c-(count/MAX)*c;
+}
+
+function increment(e){
+ if(e) e.preventDefault();
+ 
+ // Resume audio context on user gesture
+ if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+
+ count++; total++;
+ if(count>=MAX){
+  count=0; cycles++;
+  if(navigator.vibrate) navigator.vibrate([150,50,150]);
+  playBell();
+ } else {
+  if(navigator.vibrate) navigator.vibrate(50);
+ }
+ 
+ localStorage.setItem("japCount",count);
+ localStorage.setItem("japCycles",cycles);
+ localStorage.setItem("japTotal",total);
+ updateUI();
+}
+
+// Mobile par double-tap zoom rokne ke liye
+document.getElementById("circleContainer").addEventListener("pointerdown", (e) => {
+    // Only trigger if not a button
+    if(e.target.tagName !== 'BUTTON') increment(e);
+});
+
+document.getElementById("openMantraModal").onclick=(e)=>{
+ e.stopPropagation();
+ document.getElementById("modalOverlay").style.display="flex";
+ const list = document.getElementById("mantraList");
+ list.innerHTML="";
+ mantras.forEach(m=>{
+  const b=document.createElement("button");
+  b.className="mantra-option";
+  b.textContent=m;
+  b.onclick=(e)=>{
+   e.stopPropagation();
+   if(m.includes("Custom")){
+    const x=prompt("Enter your mantra");
+    if(x && x.trim() !== "") mantra=x.trim();
+   }else mantra=m;
+   localStorage.setItem("userMantra",mantra);
+   document.getElementById("modalOverlay").style.display="none";
+   updateUI();
+  };
+  list.appendChild(b);
+ });
+};
+
+document.getElementById("closeModal").onclick=()=>document.getElementById("modalOverlay").style.display="none";
+
+document.getElementById("resetBtn").onclick=(e)=>{
+ e.stopPropagation();
+ if(confirm("Reset all counts?")){
+  count=0; cycles=0; total=0;
+  localStorage.setItem("japCount", 0);
+  localStorage.setItem("japCycles", 0);
+  localStorage.setItem("japTotal", 0);
+  updateUI();
+ }
+};
+
+updateUI();
+</script>
+
+</body>
+</html>
