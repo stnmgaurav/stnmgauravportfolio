@@ -47,7 +47,6 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 25px;
-      cursor: pointer;
     }
 
     #mantra {
@@ -93,14 +92,12 @@
     button {
       padding: 16px; border: none; border-radius: 16px;
       font-size: 1rem; font-weight: 600; cursor: pointer;
-      transition: transform 0.1s, background 0.2s;
+      transition: transform 0.1s;
     }
 
     .btn-main { background: var(--primary); color: #000; }
     .btn-outline { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
-    button:active { transform: scale(0.96); }
 
-    /* Modal Styling */
     #modalOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.85); display: none;
@@ -120,10 +117,7 @@
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
       color: #fff; border-radius: 12px; cursor: pointer;
-      font-size: 0.95rem;
     }
-
-    .mantra-option:hover { background: var(--primary); color: #000; }
 
     footer {
       padding: 20px; font-size: 0.7rem; opacity: 0.4;
@@ -184,13 +178,7 @@
   <script>
     const MAX = 108;
     const premadeMantras = [
-      "राधा",
-      "ॐ नमो भगवते वासुदेवाय",
-      "हरे कृष्ण",
-      "ॐ नमः शिवाय",
-      "ॐ गण गणपतये नमः",
-      "श्री राम जय राम",
-      "Custom (Type your own)"
+      "राधा", "ॐ नमो भगवते वासुदेवाय", "हरे कृष्ण", "ॐ नमः शिवाय", "ॐ गण गणपतये नमः", "श्री राम जय राम", "Custom (Type your own)"
     ];
 
     let count = parseInt(localStorage.getItem("japCount")) || 0;
@@ -203,90 +191,12 @@
     const circumference = 2 * Math.PI * radius;
     circle.style.strokeDasharray = `${circumference} ${circumference}`;
 
-    function updateUI() {
-      document.getElementById("countDisplay").textContent = count;
-      document.getElementById("cycleCount").textContent = cycles;
-      document.getElementById("totalCount").textContent = total;
-      document.getElementById("mantra").textContent = mantra;
-      const offset = circumference - (count / MAX) * circumference;
-      circle.style.strokeDashoffset = offset;
-    }
+    // --- Audio Logic ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    function triggerVibration(type) {
-      if (navigator.vibrate) {
-        type === 'mala' ? navigator.vibrate([150, 50, 150]) : navigator.vibrate(50);
-      }
-    }
+    function playBellSound() {
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
 
-    function increment() {
-      count++; total++;
-      if (count >= MAX) { 
-        count = 0; 
-        cycles++; 
-        triggerVibration('mala'); 
-      } else { 
-        triggerVibration('tap'); 
-      }
-      localStorage.setItem("japCount", count);
-      localStorage.setItem("japCycles", cycles);
-      localStorage.setItem("japTotal", total);
-      updateUI();
-    }
-
-    const modal = document.getElementById("modalOverlay");
-    const mantraList = document.getElementById("mantraList");
-
-    document.getElementById("openMantraModal").addEventListener("click", (e) => {
-      e.stopPropagation();
-      modal.style.display = "flex";
-      renderMantraOptions();
-    });
-
-    document.getElementById("closeModal").addEventListener("click", () => modal.style.display = "none");
-
-    function renderMantraOptions() {
-      mantraList.innerHTML = "";
-      premadeMantras.forEach(m => {
-        const btn = document.createElement("button");
-        btn.className = "mantra-option";
-        btn.textContent = m;
-        btn.onclick = (e) => {
-          e.stopPropagation();
-          if (m.includes("Custom")) {
-            const custom = prompt("Enter your mantra:");
-            if (custom && custom.trim() !== "") setMantra(custom.trim());
-          } else {
-            setMantra(m);
-          }
-          modal.style.display = "none";
-        };
-        mantraList.appendChild(btn);
-      });
-    }
-
-    function setMantra(newMantra) {
-      mantra = newMantra;
-      localStorage.setItem("userMantra", mantra);
-      updateUI();
-    }
-
-    // Use pointerup for broader mobile support and to prevent accidental double-taps
-    document.body.addEventListener("pointerup", (e) => {
-      if (e.target.tagName !== 'BUTTON' && modal.style.display !== "flex") {
-        increment();
-      }
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", (e) => {
-      e.stopPropagation();
-      if(confirm("Reset all counts? This will clear your lifetime total too.")) {
-        count = 0; cycles = 0; total = 0;
-        localStorage.clear();
-        updateUI();
-      }
-    });
-
-    updateUI();
-  </script>
-</body>
-</html>
+      oscillator.type = 'sine'; // Soft bell sound
+      oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); //
