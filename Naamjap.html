@@ -4,103 +4,201 @@
   <meta charset="UTF-8">
   <title>Nam Jap Counter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --primary: #ff9800;
+      --secondary: #fb8c00;
+      --bg: #1a1a1a; /* Dark mode is more modern and saves battery */
+      --card-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    h1 {
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      color: var(--primary);
+    }
+
+    #circleContainer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.3s ease;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+
+    #mantra {
+      position: absolute;
+      font-size: 1.4rem;
+      text-align: center;
+      width: 150px;
+      line-height: 1.4;
+      text-shadow: 0 0 10px rgba(255,152,0,0.5);
+    }
+
+    .stats-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 20px;
+      text-align: center;
+      margin: 20px 0;
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 80%;
+      max-width: 300px;
+    }
+
+    #countDisplay { font-size: 2.2rem; font-weight: 700; margin-bottom: 5px; }
+    .label { font-size: 0.8rem; text-transform: uppercase; opacity: 0.6; letter-spacing: 1px; }
+
+    .sub-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary { background: var(--primary); color: #000; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    button:active { transform: scale(0.95); opacity: 0.8; }
+
+    footer { position: fixed; bottom: 15px; font-size: 0.7rem; opacity: 0.4; }
+  </style>
 </head>
 <body>
 
-  <body class="namjap-page">
-  <h1>🕉️ Naam Jap Counter</h1>
+  <h1>NAM JAP</h1>
 
   <div id="circleContainer">
-    <svg class="progress-ring" width="200" height="200">
-      <circle
-        class="progress-ring__circle"
-        stroke="ff9800"
-        stroke-width="12"
-        fill="transparent"
-        r="90"
-        cx="100"
-        cy="100"
-      />
+    <svg width="220" height="220">
+      <circle stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="transparent" r="100" cx="110" cy="110"/>
+      <circle id="progressCircle" stroke="var(--primary)" stroke-width="8" stroke-linecap="round" fill="transparent" r="100" cx="110" cy="110" class="progress-ring__circle"/>
     </svg>
-</div>
-
-    <!-- Mantra text (user can change this) -->
-    <div id="mantra"></div>
+    <div id="mantra">ॐ</div>
   </div>
 
-  <div id="countDisplay">Jap: 0 / 108</div>
-  <div id="cycleCount">Total mala Completed: 0</div>
+  <div class="stats-container">
+    <div id="countDisplay">0</div>
+    <div class="label">Current Jap (of 108)</div>
+    
+    <div class="sub-stats">
+      <div>
+        <div id="cycleCount" style="font-weight: bold;">0</div>
+        <div class="label">Malas</div>
+      </div>
+      <div>
+        <div id="totalCount" style="font-weight: bold;">0</div>
+        <div class="label">Lifetime</div>
+      </div>
+    </div>
+  </div>
 
-  <button id="changeMantraButton">Change Mantra</button>
+  <div class="button-group">
+    <button class="btn-primary" id="changeMantraBtn">Change Mantra</button>
+    <button class="btn-secondary" id="resetBtn">Reset All</button>
+  </div>
 
-  <footer>&copy; 2025 Naam Jap Counter by Gaurav</footer>
+  <footer>©2026 NAAM JAP COUNTER</footer>
 
   <script>
-    const MAX_COUNT = 108;
+    const MAX = 108;
     let count = parseInt(localStorage.getItem("japCount")) || 0;
     let cycles = parseInt(localStorage.getItem("japCycles")) || 0;
-
-    const countDisplay = document.getElementById("countDisplay");
-    const cycleDisplay = document.getElementById("cycleCount");
-    const mantraDisplay = document.getElementById("mantra");
-
-    // Load saved mantra or default
+    let total = parseInt(localStorage.getItem("japTotal")) || 0;
     let mantra = localStorage.getItem("userMantra") || "ॐ नमः शिवाय";
-    mantraDisplay.textContent = mantra;
 
-    // Circle animation setup
-    const circle = document.querySelector('.progress-ring__circle');
+    const circle = document.getElementById("progressCircle");
     const radius = circle.r.baseVal.value;
     const circumference = 2 * Math.PI * radius;
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
 
-    circle.style.strokeDasharray = `${circumference}`;
-    circle.style.strokeDashoffset = `${circumference}`;
-
-    function setProgress(percent) {
-      const offset = circumference - (percent / 100) * circumference;
+    function updateUI() {
+      document.getElementById("countDisplay").textContent = count;
+      document.getElementById("cycleCount").textContent = cycles;
+      document.getElementById("totalCount").textContent = total;
+      document.getElementById("mantra").textContent = mantra;
+      
+      const offset = circumference - (count / MAX) * circumference;
       circle.style.strokeDashoffset = offset;
     }
 
-    function updateDisplay() {
-      countDisplay.textContent = `Jap: ${count} / ${MAX_COUNT}`;
-      cycleDisplay.textContent = `Total mala Completed: ${cycles}`;
-      const progressPercent = (count / MAX_COUNT) * 100;
-      setProgress(progressPercent);
-    }
-
-    function incrementJap() {
-      if (navigator.vibrate) navigator.vibrate(50); // vibration
+    function increment() {
       count++;
-      if (count >= MAX_COUNT) {
+      total++;
+      if (count >= MAX) {
         count = 0;
         cycles++;
-        localStorage.setItem("japCycles", cycles);
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Long pulse for mala finish
+      } else {
+        if (navigator.vibrate) navigator.vibrate(40);
       }
+      
       localStorage.setItem("japCount", count);
-      updateDisplay();
+      localStorage.setItem("japCycles", cycles);
+      localStorage.setItem("japTotal", total);
+      updateUI();
     }
 
-    // Change Mantra Function
-    document.getElementById("changeMantraButton").addEventListener("click", () => {
-      const newMantra = prompt("Enter your mantra:", mantra);
-      if (newMantra !== null && newMantra.trim() !== "") {
-        mantra = newMantra.trim();
-        localStorage.setItem("userMantra", mantra);
-        mantraDisplay.textContent = mantra;
+    document.body.addEventListener("pointerdown", (e) => {
+      if (e.target.tagName !== 'BUTTON') increment();
+    });
+
+    document.getElementById("changeMantraBtn").addEventListener("click", () => {
+      const n = prompt("Enter Mantra:", mantra);
+      if (n) {
+        mantra = n;
+        localStorage.setItem("userMantra", n);
+        updateUI();
       }
     });
 
-    // On click/touch anywhere on screen
-    document.body.addEventListener("pointerdown", (e) => {
-  e.preventDefault(); // helps prevent accidental zoom or text selection
-  navigator.vibrate?.(50); // short vibration on tap
-  incrementJap();
-});
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      if(confirm("Are you sure you want to reset all progress?")) {
+        count = 0; cycles = 0; total = 0;
+        localStorage.clear();
+        updateUI();
+      }
+    });
 
-    // Initial load
-    updateDisplay();
+    updateUI();
   </script>
-
 </body>
 </html>
