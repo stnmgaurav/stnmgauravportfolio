@@ -31,7 +31,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding-top: 30px;
+      padding-top: 40px;
       width: 100%;
     }
 
@@ -46,7 +46,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      cursor: pointer;
     }
 
     #mantra {
@@ -56,11 +57,12 @@
       width: 150px;
       pointer-events: none;
       font-weight: 500;
+      line-height: 1.4;
     }
 
     .stats-card {
       background: var(--card-bg);
-      padding: 15px;
+      padding: 20px;
       border-radius: 24px;
       width: 90%;
       max-width: 340px;
@@ -68,13 +70,13 @@
       border: 1px solid rgba(255,255,255,0.1);
     }
 
-    #countDisplay { font-size: 3rem; font-weight: 800; color: var(--primary); margin: 0; }
-    .label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 1px; }
+    #countDisplay { font-size: 3.5rem; font-weight: 800; color: var(--primary); margin: 0; line-height: 1; }
+    .label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 1px; margin-top: 5px; }
 
     .grid-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      margin-top: 15px;
+      margin-top: 20px;
       padding-top: 15px;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
@@ -82,8 +84,8 @@
     .button-stack {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin: 20px 0;
+      gap: 12px;
+      margin: 30px 0;
       width: 90%;
       max-width: 340px;
     }
@@ -91,7 +93,7 @@
     button {
       padding: 16px; border: none; border-radius: 16px;
       font-size: 1rem; font-weight: 600; cursor: pointer;
-      transition: transform 0.1s;
+      transition: transform 0.1s, background 0.2s;
     }
 
     .btn-main { background: var(--primary); color: #000; }
@@ -101,8 +103,9 @@
     /* Modal Styling */
     #modalOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8); display: none;
+      background: rgba(0,0,0,0.85); display: none;
       justify-content: center; align-items: center; z-index: 100;
+      backdrop-filter: blur(5px);
     }
 
     .modal {
@@ -113,21 +116,22 @@
     }
 
     .mantra-option {
-      width: 100%; padding: 12px; margin: 8px 0;
+      width: 100%; padding: 14px; margin: 8px 0;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
       color: #fff; border-radius: 12px; cursor: pointer;
+      font-size: 0.95rem;
     }
 
     .mantra-option:hover { background: var(--primary); color: #000; }
 
     footer {
-      padding: 15px; font-size: 0.7rem; opacity: 0.4;
-      text-align: center;
+      padding: 20px; font-size: 0.7rem; opacity: 0.4;
+      text-align: center; width: 100%;
     }
 
     .progress-ring__circle {
-      transition: stroke-dashoffset 0.25s ease-out;
+      transition: stroke-dashoffset 0.3s ease-out;
       transform: rotate(-90deg); transform-origin: 50% 50%;
     }
   </style>
@@ -138,25 +142,25 @@
     <h1>NAM JAP</h1>
 
     <div id="circleContainer">
-      <svg width="200" height="200">
-        <circle stroke="rgba(255,255,255,0.05)" stroke-width="10" fill="transparent" r="90" cx="100" cy="100"/>
-        <circle id="progressCircle" stroke="var(--primary)" stroke-width="10" stroke-linecap="round" fill="transparent" r="90" cx="100" cy="100" class="progress-ring__circle"/>
+      <svg width="220" height="220">
+        <circle stroke="rgba(255,255,255,0.05)" stroke-width="12" fill="transparent" r="95" cx="110" cy="110"/>
+        <circle id="progressCircle" stroke="var(--primary)" stroke-width="12" stroke-linecap="round" fill="transparent" r="95" cx="110" cy="110" class="progress-ring__circle"/>
       </svg>
-      <div id="mantra">ॐ नमः शिवाय</div>
+      <div id="mantra">राधा</div>
     </div>
 
     <div class="stats-card">
       <div id="countDisplay">0</div>
-      <div class="label">Mala Progress</div>
+      <div class="label">Mala Progress (108)</div>
       
       <div class="grid-stats">
         <div>
-          <div id="cycleCount" style="font-size: 1.2rem; font-weight: bold;">0</div>
+          <div id="cycleCount" style="font-size: 1.3rem; font-weight: bold;">0</div>
           <div class="label">Malas</div>
         </div>
         <div>
-          <div id="totalCount" style="font-size: 1.2rem; font-weight: bold;">0</div>
-          <div class="label">Lifetime</div>
+          <div id="totalCount" style="font-size: 1.3rem; font-weight: bold;">0</div>
+          <div class="label">Total Jap</div>
         </div>
       </div>
     </div>
@@ -169,9 +173,8 @@
 
   <div id="modalOverlay">
     <div class="modal">
-      <h2 style="margin-top:0; color:var(--primary); font-size: 1.2rem;">Choose Mantra</h2>
-      <div id="mantraList">
-        </div>
+      <h2 style="margin-top:0; color:var(--primary); font-size: 1.3rem;">Choose Mantra</h2>
+      <div id="mantraList"></div>
       <button class="btn-outline" style="margin-top:15px; width:100%;" id="closeModal">Cancel</button>
     </div>
   </div>
@@ -184,7 +187,7 @@
       "राधा",
       "ॐ नमो भगवते वासुदेवाय",
       "हरे कृष्ण",
-      ""ॐ नमः शिवाय",
+      "ॐ नमः शिवाय",
       "ॐ गण गणपतये नमः",
       "श्री राम जय राम",
       "Custom (Type your own)"
@@ -211,21 +214,25 @@
 
     function triggerVibration(type) {
       if (navigator.vibrate) {
-        type === 'mala' ? navigator.vibrate([100, 50, 100]) : navigator.vibrate(60);
+        type === 'mala' ? navigator.vibrate([150, 50, 150]) : navigator.vibrate(50);
       }
     }
 
     function increment() {
       count++; total++;
-      if (count >= MAX) { count = 0; cycles++; triggerVibration('mala'); } 
-      else { triggerVibration('tap'); }
+      if (count >= MAX) { 
+        count = 0; 
+        cycles++; 
+        triggerVibration('mala'); 
+      } else { 
+        triggerVibration('tap'); 
+      }
       localStorage.setItem("japCount", count);
       localStorage.setItem("japCycles", cycles);
       localStorage.setItem("japTotal", total);
       updateUI();
     }
 
-    // Modal Logic
     const modal = document.getElementById("modalOverlay");
     const mantraList = document.getElementById("mantraList");
 
@@ -243,10 +250,11 @@
         const btn = document.createElement("button");
         btn.className = "mantra-option";
         btn.textContent = m;
-        btn.onclick = () => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
           if (m.includes("Custom")) {
             const custom = prompt("Enter your mantra:");
-            if (custom) setMantra(custom);
+            if (custom && custom.trim() !== "") setMantra(custom.trim());
           } else {
             setMantra(m);
           }
@@ -262,7 +270,8 @@
       updateUI();
     }
 
-    document.body.addEventListener("pointerdown", (e) => {
+    // Use pointerup for broader mobile support and to prevent accidental double-taps
+    document.body.addEventListener("pointerup", (e) => {
       if (e.target.tagName !== 'BUTTON' && modal.style.display !== "flex") {
         increment();
       }
@@ -270,7 +279,7 @@
 
     document.getElementById("resetBtn").addEventListener("click", (e) => {
       e.stopPropagation();
-      if(confirm("Reset all session data?")) {
+      if(confirm("Reset all counts? This will clear your lifetime total too.")) {
         count = 0; cycles = 0; total = 0;
         localStorage.clear();
         updateUI();
