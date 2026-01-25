@@ -237,11 +237,11 @@ function playBell(){
     function increment() {
       count++;
       total++;
-      playBell();
       
       if (count >= MAX) { 
         count = 0; 
         cycles++;
+        playBell();
         triggerVibration('mala'); 
       } else { 
         triggerVibration('tap'); 
