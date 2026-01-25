@@ -7,30 +7,40 @@
   <style>
     :root {
       --primary: #ff9800;
-      --secondary: #fb8c00;
-      --bg: #1a1a1a; /* Dark mode is more modern and saves battery */
-      --card-bg: rgba(255, 255, 255, 0.05);
+      --bg: #121212;
+      --card-bg: rgba(255, 255, 255, 0.07);
     }
 
     body {
       margin: 0;
-      font-family: 'Inter', -apple-system, sans-serif;
+      font-family: 'Segoe UI', system-ui, sans-serif;
       background-color: var(--bg);
       color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       height: 100vh;
       overflow: hidden;
       touch-action: manipulation;
     }
 
+    /* Main content area pushed slightly up */
+    .app-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; /* Centers content */
+      padding-top: 20px; /* Shifts everything slightly up */
+      width: 100%;
+    }
+
     h1 {
       font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 30px;
+      letter-spacing: 3px;
+      margin: 0 0 20px 0;
       color: var(--primary);
+      font-size: 1.2rem;
     }
 
     #circleContainer {
@@ -38,105 +48,111 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-    }
-
-    .progress-ring__circle {
-      transition: stroke-dashoffset 0.3s ease;
-      transform: rotate(-90deg);
-      transform-origin: 50% 50%;
+      margin-bottom: 20px;
     }
 
     #mantra {
       position: absolute;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       text-align: center;
-      width: 150px;
-      line-height: 1.4;
-      text-shadow: 0 0 10px rgba(255,152,0,0.5);
+      width: 160px;
+      pointer-events: none;
     }
 
-    .stats-container {
+    .stats-card {
       background: var(--card-bg);
-      backdrop-filter: blur(10px);
       padding: 20px;
-      border-radius: 20px;
+      border-radius: 24px;
+      width: 85%;
+      max-width: 320px;
       text-align: center;
-      margin: 20px 0;
       border: 1px solid rgba(255,255,255,0.1);
-      width: 80%;
-      max-width: 300px;
     }
 
-    #countDisplay { font-size: 2.2rem; font-weight: 700; margin-bottom: 5px; }
-    .label { font-size: 0.8rem; text-transform: uppercase; opacity: 0.6; letter-spacing: 1px; }
+    #countDisplay { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+    .label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 1px; }
 
-    .sub-stats {
+    .grid-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
 
-    .button-group {
+    .button-stack {
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 25px;
+      width: 85%;
+      max-width: 320px;
     }
 
     button {
-      padding: 12px 20px;
+      padding: 15px;
       border: none;
-      border-radius: 12px;
+      border-radius: 16px;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
-      font-size: 0.9rem;
+      transition: transform 0.1s;
     }
 
-    .btn-primary { background: var(--primary); color: #000; }
-    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
-    button:active { transform: scale(0.95); opacity: 0.8; }
+    .btn-main { background: var(--primary); color: #000; }
+    .btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    button:active { transform: scale(0.97); }
 
-    footer { position: fixed; bottom: 15px; font-size: 0.7rem; opacity: 0.4; }
+    footer {
+      padding: 20px;
+      font-size: 0.7rem;
+      opacity: 0.4;
+      text-align: center;
+    }
+
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.2s ease-out;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
   </style>
 </head>
 <body>
 
-  <h1>NAM JAP</h1>
+  <div class="app-container">
+    <h1>NAAM JAP COUNTER</h1>
 
-  <div id="circleContainer">
-    <svg width="220" height="220">
-      <circle stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="transparent" r="100" cx="110" cy="110"/>
-      <circle id="progressCircle" stroke="var(--primary)" stroke-width="8" stroke-linecap="round" fill="transparent" r="100" cx="110" cy="110" class="progress-ring__circle"/>
-    </svg>
-    <div id="mantra">ॐ</div>
-  </div>
+    <div id="circleContainer">
+      <svg width="210" height="210">
+        <circle stroke="rgba(255,255,255,0.05)" stroke-width="10" fill="transparent" r="95" cx="105" cy="105"/>
+        <circle id="progressCircle" stroke="var(--primary)" stroke-width="10" stroke-linecap="round" fill="transparent" r="95" cx="105" cy="105" class="progress-ring__circle"/>
+      </svg>
+      <div id="mantra">ॐ</div>
+    </div>
 
-  <div class="stats-container">
-    <div id="countDisplay">0</div>
-    <div class="label">Current Jap (of 108)</div>
-    
-    <div class="sub-stats">
-      <div>
-        <div id="cycleCount" style="font-weight: bold;">0</div>
-        <div class="label">Malas</div>
+    <div class="stats-card">
+      <div id="countDisplay">0</div>
+      <div class="label">Current Mala Progress</div>
+      
+      <div class="grid-stats">
+        <div>
+          <div id="cycleCount" style="font-size: 1.2rem;">0</div>
+          <div class="label">Completed</div>
+        </div>
+        <div>
+          <div id="totalCount" style="font-size: 1.2rem;">0</div>
+          <div class="label">Total Jap</div>
+        </div>
       </div>
-      <div>
-        <div id="totalCount" style="font-weight: bold;">0</div>
-        <div class="label">Lifetime</div>
-      </div>
+    </div>
+
+    <div class="button-stack">
+      <button class="btn-main" id="changeMantraBtn">Change Mantra</button>
+      <button class="btn-outline" id="resetBtn">Reset Session</button>
     </div>
   </div>
 
-  <div class="button-group">
-    <button class="btn-primary" id="changeMantraBtn">Change Mantra</button>
-    <button class="btn-secondary" id="resetBtn">Reset All</button>
-  </div>
-
-  <footer>©2026 NAAM JAP COUNTER</footer>
+  <footer>©2026 NAAM JAP COUNTER BY GAURAV</footer>
 
   <script>
     const MAX = 108;
@@ -155,20 +171,30 @@
       document.getElementById("cycleCount").textContent = cycles;
       document.getElementById("totalCount").textContent = total;
       document.getElementById("mantra").textContent = mantra;
-      
       const offset = circumference - (count / MAX) * circumference;
       circle.style.strokeDashoffset = offset;
+    }
+
+    function triggerVibration(type) {
+      if (!window.navigator.vibrate) return;
+      
+      if (type === 'mala') {
+        window.navigator.vibrate([100, 50, 100]); // Pulse for 108
+      } else {
+        window.navigator.vibrate(50); // Short tap
+      }
     }
 
     function increment() {
       count++;
       total++;
+      
       if (count >= MAX) {
         count = 0;
         cycles++;
-        if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Long pulse for mala finish
+        triggerVibration('mala');
       } else {
-        if (navigator.vibrate) navigator.vibrate(40);
+        triggerVibration('tap');
       }
       
       localStorage.setItem("japCount", count);
@@ -177,11 +203,15 @@
       updateUI();
     }
 
-    document.body.addEventListener("pointerdown", (e) => {
-      if (e.target.tagName !== 'BUTTON') increment();
+    // Attach to pointerup for better vibration compatibility
+    document.body.addEventListener("pointerup", (e) => {
+      if (e.target.tagName !== 'BUTTON') {
+        increment();
+      }
     });
 
-    document.getElementById("changeMantraBtn").addEventListener("click", () => {
+    document.getElementById("changeMantraBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
       const n = prompt("Enter Mantra:", mantra);
       if (n) {
         mantra = n;
@@ -190,14 +220,18 @@
       }
     });
 
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      if(confirm("Are you sure you want to reset all progress?")) {
+    document.getElementById("resetBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      if(confirm("Reset all counts?")) {
         count = 0; cycles = 0; total = 0;
-        localStorage.clear();
+        localStorage.setItem("japCount", 0);
+        localStorage.setItem("japCycles", 0);
+        localStorage.setItem("japTotal", 0);
         updateUI();
       }
     });
 
+    // Initialize
     updateUI();
   </script>
 </body>
