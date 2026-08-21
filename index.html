@@ -1,280 +1,602 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gaurav's Portfolio</title>
-  
-  <!-- Tailwind CSS CDN for modern styling -->
+  <meta name="description" content="Gaurav's portfolio — beginner web developer, learner and explorer, building things one project at a time.">
+  <meta name="theme-color" content="#12111a">
+  <title>Gaurav — Web Developer</title>
+
+  <!-- Tailwind CSS (JIT / Play CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Font: Inter (for clean, modern look) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-  
+
+  <!-- Fonts: Space Grotesk (display), Inter (body), JetBrains Mono (code/utility) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    /* Default font set to Inter */
-    body {
+    /* ============================================================
+       DESIGN TOKENS
+       ============================================================ */
+    :root[data-theme="dark"]{
+      --bg: #12111a;
+      --bg-alt: #1a1926;
+      --surface: #1e1d2c;
+      --surface-2: #242332;
+      --border: rgba(255,255,255,0.08);
+      --text: #eeecf6;
+      --text-muted: #a29fb8;
+      --accent: #e8434c;       /* crimson */
+      --accent-soft: rgba(232,67,76,0.14);
+      --accent-2: #f2b134;     /* gold */
+      --accent-2-soft: rgba(242,177,52,0.14);
+      --shadow: 0 20px 50px -20px rgba(0,0,0,0.6);
+    }
+    :root[data-theme="light"]{
+      --bg: #f7f5f1;
+      --bg-alt: #ffffff;
+      --surface: #ffffff;
+      --surface-2: #f0eee8;
+      --border: rgba(20,18,30,0.08);
+      --text: #1c1a26;
+      --text-muted: #605c74;
+      --accent: #d92d3a;
+      --accent-soft: rgba(217,45,58,0.08);
+      --accent-2: #b8790f;
+      --accent-2-soft: rgba(184,121,15,0.12);
+      --shadow: 0 20px 40px -24px rgba(20,18,30,0.25);
+    }
+
+    * { scroll-behavior: smooth; }
+    body{
       font-family: 'Inter', sans-serif;
-      background-color: #f8fafc; /* Light blue/gray background */
-      padding-top: 4rem; /* Fixed header ke liye space */
-      color: #ef4444;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color .4s ease, color .4s ease;
+    }
+    .font-display{ font-family: 'Space Grotesk', sans-serif; }
+    .font-mono{ font-family: 'JetBrains Mono', monospace; }
+
+    ::selection{ background: var(--accent); color: #fff; }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar{ width: 10px; }
+    ::-webkit-scrollbar-track{ background: var(--bg); }
+    ::-webkit-scrollbar-thumb{ background: var(--surface-2); border-radius: 10px; border: 2px solid var(--bg); }
+
+    /* Visible keyboard focus everywhere */
+    a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
+      outline: 2px solid var(--accent-2);
+      outline-offset: 3px;
+      border-radius: 4px;
     }
 
-   /* --- Slideshow container (Updated Stable Version) --- */
-.slideshow-container {
-  width: 100%;
-  aspect-ratio: 9 / 16;       /* Fixed ratio for stable height */
-  position: relative;
-  margin: auto;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f0f4f8;        /* Light background for smaller images */
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
+    /* ============================================================
+       NAV
+       ============================================================ */
+    .glass-nav{
+      background: color-mix(in srgb, var(--bg) 78%, transparent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-link{
+      position: relative;
+      color: var(--text-muted);
+      transition: color .25s ease;
+    }
+    .nav-link::after{
+      content:"";
+      position:absolute; left:0; bottom:-4px;
+      width:0; height:2px;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .nav-link:hover, .nav-link.active{ color: var(--text); }
+    .nav-link:hover::after, .nav-link.active::after{ width: 100%; }
 
-   .mySlides img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;         /* Full image visible, no cropping */
-  background-color: #FFFFFF;
-}
-
-@media (max-width: 768px) {
-  .slideshow-container {
-    aspect-ratio: 9 / 16;       /* Mobile view adjustment */
-  }
-}
-
-    /* Next & previous buttons */
-    .prev, .next {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      width: auto;
-      padding: 16px;
-      margin-top: -22px;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      transition: 0.6s ease;
-      border-radius: 0 3px 3px 0;
-      user-select: none;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 10;
+    #scroll-progress{
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      width: 0%; z-index: 60;
+      transition: width .1s linear;
     }
 
-    /* Position the "next button" to the right */
-    .next {
-      right: 0;
-      border-radius: 3px 0 0 3px;
+    .theme-toggle{
+      width: 42px; height: 42px;
+      display: grid; place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text);
+      transition: transform .3s ease, border-color .3s ease, background .3s ease;
+    }
+    .theme-toggle:hover{ transform: rotate(20deg); border-color: var(--accent); }
+
+    /* ============================================================
+       REVEAL ON SCROLL
+       ============================================================ */
+    .reveal{ opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in-view{ opacity: 1; transform: translateY(0); }
+    .reveal-stagger > *{ opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal-stagger.in-view > *{ opacity: 1; transform: translateY(0); }
+    .reveal-stagger.in-view > *:nth-child(1){ transition-delay: .05s; }
+    .reveal-stagger.in-view > *:nth-child(2){ transition-delay: .15s; }
+    .reveal-stagger.in-view > *:nth-child(3){ transition-delay: .25s; }
+    .reveal-stagger.in-view > *:nth-child(4){ transition-delay: .35s; }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; }
     }
 
-    /* On hover, add a black background with a little more opacity */
-    .prev:hover, .next:hover {
-      background-color: rgba(0, 0, 0, 0.8);
+    /* ============================================================
+       HERO / CODE PANEL (signature element)
+       ============================================================ */
+    .hero-glow{
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(600px circle at 15% 20%, var(--accent-soft), transparent 60%),
+        radial-gradient(500px circle at 85% 30%, var(--accent-2-soft), transparent 60%);
+      pointer-events: none;
+    }
+    .code-panel{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .code-panel-head{
+      display:flex; align-items:center; gap:8px;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .dot-tl{ width:11px; height:11px; border-radius:999px; }
+    .code-line{
+      opacity: 0; transform: translateX(-8px);
+      animation: codeIn .5s ease forwards;
+    }
+    .code-line:nth-child(1){ animation-delay: .3s; }
+    .code-line:nth-child(2){ animation-delay: .55s; }
+    .code-line:nth-child(3){ animation-delay: .8s; }
+    .code-line:nth-child(4){ animation-delay: 1.05s; }
+    .code-line:nth-child(5){ animation-delay: 1.3s; }
+    .code-line:nth-child(6){ animation-delay: 1.55s; }
+    .code-line:nth-child(7){ animation-delay: 1.8s; }
+    @keyframes codeIn{ to{ opacity: 1; transform: translateX(0); } }
+    .cursor-blink{
+      display:inline-block; width:8px; height:16px; margin-left:2px;
+      background: var(--accent-2);
+      opacity: 0;
+      animation: cursorAppear .1s ease 2s forwards, blink 1s step-end 2s infinite;
+    }
+    @keyframes blink{ 50%{ opacity: 0; } }
+    @keyframes cursorAppear{ to{ opacity: 1; } }
+
+    .kw{ color: var(--accent-2); }
+    .str{ color: var(--accent); }
+    .punc{ color: var(--text-muted); }
+    .prop{ color: #8fb4ff; }
+
+    .avatar-ring{
+      background: conic-gradient(from 180deg, var(--accent), var(--accent-2), var(--accent));
+      padding: 4px; border-radius: 999px;
     }
 
-    /* The dots/bullets/indicators */
-    .dot {
-      cursor: pointer;
-      height: 10px;
-      width: 10px;
-      margin: 0 4px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.6s ease;
+    /* ============================================================
+       CARDS / SECTIONS
+       ============================================================ */
+    .surface-card{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+    }
+    .surface-card:hover{ transform: translateY(-4px); border-color: var(--accent); box-shadow: var(--shadow); }
+
+    .tag{
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: .03em;
+      padding: 3px 10px; border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .tag-live{ color: #4ade80; border-color: rgba(74,222,128,.3); background: rgba(74,222,128,.08); }
+    .tag-building{ color: var(--accent-2); border-color: var(--accent-2-soft); background: var(--accent-2-soft); }
+
+    .pulse-dot{
+      width:7px; height:7px; border-radius:999px; background: var(--accent-2);
+      box-shadow: 0 0 0 0 var(--accent-2-soft);
+      animation: pulseDot 1.8s infinite;
+    }
+    @keyframes pulseDot{
+      0%{ box-shadow: 0 0 0 0 var(--accent-2-soft); }
+      70%{ box-shadow: 0 0 0 8px transparent; }
+      100%{ box-shadow: 0 0 0 0 transparent; }
     }
 
-    .active, .dot:hover {
-      background-color: #B91C1C; /* light red active color */
+    .skill-chip{
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      transition: color .25s ease, border-color .25s ease, transform .25s ease;
     }
+    .skill-chip:hover{ color: var(--text); border-color: var(--accent); transform: translateY(-2px); }
 
-    /* Fading animation */
-    .fade {
-      animation-name: fade;
-      animation-duration: 1.5s;
+    /* ============================================================
+       GALLERY / SLIDESHOW
+       ============================================================ */
+    .slideshow-container{
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      position: relative;
+      margin: auto;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--surface-2);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
     }
+    @media (min-width: 768px){
+      .slideshow-container{ aspect-ratio: 16 / 10; }
+    }
+    .mySlides{
+      position:absolute; inset:0;
+      opacity: 0; transition: opacity .6s ease;
+      cursor: zoom-in;
+    }
+    .mySlides.active{ opacity: 1; }
+    .mySlides img{ width:100%; height:100%; object-fit: contain; background: var(--surface-2); }
 
-    @keyframes fade {
-      from {opacity: .4} 
-      to {opacity: 1}
+    .slide-btn{
+      cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%);
+      width: 42px; height: 42px; display: grid; place-items: center;
+      color: #fff; background: rgba(0,0,0,0.45);
+      border-radius: 999px; z-index: 10; transition: background .25s ease, transform .25s ease;
     }
+    .slide-btn:hover{ background: rgba(0,0,0,0.75); transform: translateY(-50%) scale(1.08); }
+    .slide-prev{ left: 12px; } .slide-next{ right: 12px; }
+
+    .dot{
+      cursor: pointer; height: 9px; width: 9px; margin: 0 4px;
+      background-color: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 50%; display: inline-block;
+      transition: background-color .3s ease, transform .3s ease;
+    }
+    .dot.active, .dot:hover{ background-color: var(--accent); transform: scale(1.2); }
+
+    #lightbox{
+      position: fixed; inset: 0; background: rgba(6,5,10,0.92);
+      display: none; align-items: center; justify-content: center;
+      z-index: 100; padding: 24px;
+    }
+    #lightbox.open{ display: flex; }
+    #lightbox img{ max-width: min(90vw, 900px); max-height: 85vh; border-radius: 10px; box-shadow: var(--shadow); }
+    #lightbox-close{
+      position: absolute; top: 20px; right: 24px; color: #fff;
+      width: 40px; height: 40px; display: grid; place-items: center;
+      border-radius: 999px; background: rgba(255,255,255,0.1);
+    }
+    #lightbox-close:hover{ background: rgba(255,255,255,0.2); }
+
+    /* ============================================================
+       CONTACT
+       ============================================================ */
+    .contact-btn{
+      display:flex; align-items:center; justify-content:center; gap:.5rem;
+      padding: .8rem 1.4rem; border-radius: 12px; font-weight: 600;
+      color: #fff; box-shadow: var(--shadow);
+      transition: transform .25s ease, filter .25s ease;
+    }
+    .contact-btn:hover{ transform: translateY(-3px); filter: brightness(1.08); }
+
+    .toast{
+      position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px);
+      background: var(--surface); color: var(--text); border: 1px solid var(--border);
+      padding: .6rem 1.1rem; border-radius: 999px; font-size: .875rem;
+      opacity: 0; pointer-events: none; transition: opacity .3s ease, transform .3s ease;
+      z-index: 90; box-shadow: var(--shadow);
+    }
+    .toast.show{ opacity: 1; transform: translate(-50%, 0); }
+
+    /* Back to top */
+    #back-to-top{
+      position: fixed; right: 20px; bottom: 20px; z-index: 50;
+      width: 46px; height: 46px; border-radius: 999px;
+      background: var(--accent); color: #fff; display: grid; place-items: center;
+      box-shadow: var(--shadow);
+      opacity: 0; transform: translateY(12px); pointer-events: none;
+      transition: opacity .3s ease, transform .3s ease;
+    }
+    #back-to-top.show{ opacity: 1; transform: translateY(0); pointer-events: auto; }
   </style>
 </head>
-<body>
-  
-  <!-- ATTRACTIVE AND RESPONSIVE NAVIGATION BAR -->
-  <nav class="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <!-- Logo/Title -->
-        <a href="index.html" class="text-2xl font-extrabold text-white tracking-wide hover:text-blue-100 transition duration-300">
-            Gaurav
-        </a>
+<body class="antialiased">
 
-        <!-- Desktop Links -->
-        <div class="hidden md:flex space-x-6">
-            <a href="index.html" class="text-lg font-medium text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded-lg hover:bg-blue-50">
-                Home
-            </a>
-            <a href="naamjap.html" class="text-lg font-medium text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded-lg hover:bg-blue-50">
-                NAAMJAP
-            </a>
-            <a href="#projects" class="text-lg font-medium text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded-lg hover:bg-blue-50">
-                Projects
-            </a>
-            <a href="#contact" class="text-lg font-medium text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded-lg hover:bg-blue-50">
-                Contact
-            </a>
-        </div>
+  <!-- Scroll progress -->
+  <div id="scroll-progress"></div>
 
-        <!-- Mobile Menu Button (Hamburger) -->
-        <button id="mobile-menu-button" type="button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
-            <!-- Icon SVG (Hamburger) -->
-            <svg id="menu-icon-open" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <!-- Icon SVG (Close) -->
-            <svg id="menu-icon-close" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+  <!-- ============================================================
+       NAV
+       ============================================================ -->
+  <nav class="glass-nav fixed top-0 left-0 w-full z-50">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+      <a href="#home" class="font-display text-xl font-bold tracking-tight" style="color:var(--text)">
+        Gaurav<span style="color:var(--accent)">.</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-1">
+        <a href="#home" class="nav-link px-3 py-2 text-sm font-medium" data-nav="home">Home</a>
+        <a href="#about" class="nav-link px-3 py-2 text-sm font-medium" data-nav="about">About</a>
+        <a href="#projects" class="nav-link px-3 py-2 text-sm font-medium" data-nav="projects">Projects</a>
+        <a href="#gallery" class="nav-link px-3 py-2 text-sm font-medium" data-nav="gallery">Gallery</a>
+        <a href="#contact" class="nav-link px-3 py-2 text-sm font-medium" data-nav="contact">Contact</a>
+        <a href="naamjap.html" class="nav-link px-3 py-2 text-sm font-medium">NAAMJAP</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light and dark theme">
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         </button>
+
+        <button id="mobile-menu-button" type="button" class="md:hidden p-2 rounded-md" style="color:var(--text)" aria-label="Open menu">
+          <svg id="menu-icon-open" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg id="menu-icon-close" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
     </div>
-    
-    <!-- Mobile Menu Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-md">
-        <div class="px-2 pt-2 pb-3 space-y-1">
-            <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600">Home</a>
-            <a href="naamjap.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600">NAAMJAP</a>
-            <a href="#projects" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600">Projects</a>
-            <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600">Contact</a>
-        </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t" style="border-color:var(--border); background:var(--bg-alt)">
+      <div class="px-3 pt-2 pb-4 space-y-1">
+        <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium" style="color:var(--text)">Home</a>
+        <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium" style="color:var(--text)">About</a>
+        <a href="#projects" class="block px-3 py-2 rounded-md text-base font-medium" style="color:var(--text)">Projects</a>
+        <a href="#gallery" class="block px-3 py-2 rounded-md text-base font-medium" style="color:var(--text)">Gallery</a>
+        <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium" style="color:var(--text)">Contact</a>
+        <a href="naamjap.html" class="block px-3 py-2 rounded-md text-base font-medium" style="color:var(--text)">NAAMJAP</a>
+      </div>
     </div>
   </nav>
 
-  <header class="text-center py-10 bg-gradient-to-b from-red-800 to-pink-700 text-white shadow-xl">
-    <h1 class="text-4xl md:text-6xl font-extrabold mb-2 tracking-tight">
-      Hi👋 welcome to my website.
-      I'm Gaurav
-    </h1>
-    <p class="text-xl md:text-2xl font-light opacity-90">
-      Beginner Web Developer | Learner | Explorer
-    </p>
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <header id="home" class="relative pt-32 pb-20 px-5 sm:px-8 overflow-hidden">
+    <div class="hero-glow"></div>
+    <div class="max-w-6xl mx-auto relative grid md:grid-cols-2 gap-12 items-center">
+
+      <div class="reveal-stagger">
+        <p class="font-mono text-xs tracking-widest uppercase mb-4" style="color:var(--accent)">Hi, I'm</p>
+        <h1 class="font-display text-5xl sm:text-6xl font-bold tracking-tight leading-[1.05] mb-5" style="color:var(--text)">
+          Gaurav
+        </h1>
+        <p class="text-lg sm:text-xl font-medium mb-6" style="color:var(--text-muted)">
+          Beginner Web Developer · Learner · Explorer
+        </p>
+        <p class="text-base leading-relaxed mb-8 max-w-md" style="color:var(--text-muted)">
+          I'm learning web development and this is my first portfolio site. I love exploring new
+          technologies and working on projects — and sharing what I learn along the way.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#projects" class="contact-btn" style="background:var(--accent)">
+            See my projects
+          </a>
+          <a href="#contact" class="contact-btn" style="background:transparent; color:var(--text); border:1px solid var(--border); box-shadow:none">
+            Say hello
+          </a>
+        </div>
+      </div>
+
+      <!-- Signature element: mock code editor -->
+      <div class="reveal">
+        <div class="code-panel">
+          <div class="code-panel-head">
+            <span class="dot-tl" style="background:#ef4444"></span>
+            <span class="dot-tl" style="background:#f2b134"></span>
+            <span class="dot-tl" style="background:#4ade80"></span>
+            <span class="font-mono text-xs ml-2" style="color:var(--text-muted)">about-me.js</span>
+          </div>
+          <div class="font-mono text-sm leading-7 p-5 sm:p-6" style="color:var(--text)">
+            <div class="code-line"><span class="kw">const</span> <span class="prop">gaurav</span> <span class="punc">=</span> <span class="punc">{</span></div>
+            <div class="code-line ml-4"><span class="prop">role</span><span class="punc">:</span> <span class="str">"Web Developer"</span><span class="punc">,</span></div>
+            <div class="code-line ml-4"><span class="prop">stack</span><span class="punc">:</span> <span class="punc">[</span><span class="str">"HTML"</span><span class="punc">,</span> <span class="str">"CSS"</span><span class="punc">,</span> <span class="str">"JavaScript"</span><span class="punc">]</span><span class="punc">,</span></div>
+            <div class="code-line ml-4"><span class="prop">mindset</span><span class="punc">:</span> <span class="str">"explorer"</span><span class="punc">,</span></div>
+            <div class="code-line ml-4"><span class="prop">status</span><span class="punc">:</span> <span class="str">"shipping v1"</span></div>
+            <div class="code-line"><span class="punc">};</span></div>
+            <div class="code-line"><span class="kw">export default</span> <span class="prop">gaurav</span><span class="cursor-blink"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <main class="max-w-4xl mx-auto p-6 space-y-12">
-    <!-- About Me Section -->
-    <section class="section about bg-white p-8 rounded-xl shadow-lg text-center" id="about">
-      <h2 class="text-3xl font-bold text-red-700 mb-6">About Me</h2>
-      <!-- Image is now styled for a modern look -->
-      <img 
-        src="myphoto.png" 
-        onerror="this.onerror=null;this.src='https://placehold.co/150x150/1e40af/ffffff?text=Gaurav'" 
-        alt="My Photo" 
-        class="w-50 h-50 object-cover rounded-full mx-auto mb-6 border-4 border-purple-200 shadow-xl transition duration-300 hover:scale-105"
-      >
-      <p class="text-lg leading-relaxed text-gray-600">
-        I am learning web development and this is my first portfolio website.
-        I love exploring new technologies and working for some projects.
-        Here I will share my experience about my learnings.
-      </p>
-    </section>
+  <main class="max-w-6xl mx-auto px-5 sm:px-8 space-y-24 pb-24">
 
-    <!-- Projects Section -->
-    <section class="section projects bg-white p-8 rounded-xl shadow-lg" id="projects">
-      <h2 class="text-3xl font-bold text-blue-800 mb-6 border-b pb-2">My Projects</h2>
-      <div class="space-y-4 text-lg">
-        <p class="flex items-center text-gray-700">
-          <span class="text-yellow-500 text-2xl mr-3">🚀</span> Project 1: Personal Portfolio Website
-        </p>
-        <p class="flex items-center text-gray-700">
-          <span class="text-purple-500 text-2xl mr-3">🛠️</span> Project 2: working on another project to create something unexpected
-        </p>
+    <!-- ============================================================
+         ABOUT
+         ============================================================ -->
+    <section id="about" class="reveal scroll-mt-24">
+      <div class="grid md:grid-cols-[auto,1fr] gap-10 items-start">
+        <div class="avatar-ring w-32 h-32 mx-auto md:mx-0 shrink-0">
+          <img
+            src="myphoto.png"
+            onerror="this.onerror=null;this.src='https://placehold.co/300x300/1e1d2c/eeecf6?text=Gaurav'"
+            alt="Photo of Gaurav"
+            class="w-full h-full object-cover rounded-full"
+            style="background:var(--surface)"
+          >
+        </div>
+        <div>
+          <p class="font-mono text-xs tracking-widest uppercase mb-3" style="color:var(--accent-2)">About</p>
+          <h2 class="font-display text-3xl font-bold mb-4" style="color:var(--text)">A bit about me</h2>
+          <p class="text-base leading-relaxed mb-6" style="color:var(--text-muted)">
+            I am learning web development and this is my first portfolio website. I love exploring
+            new technologies and working on projects. Here I'll share my experience as I keep learning.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="skill-chip font-mono text-xs px-3 py-1.5 rounded-full">HTML</span>
+            <span class="skill-chip font-mono text-xs px-3 py-1.5 rounded-full">CSS</span>
+            <span class="skill-chip font-mono text-xs px-3 py-1.5 rounded-full">JavaScript</span>
+            <span class="skill-chip font-mono text-xs px-3 py-1.5 rounded-full">Tailwind CSS</span>
+            <span class="skill-chip font-mono text-xs px-3 py-1.5 rounded-full">Always exploring →</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section class="section gallery bg-white p-8 rounded-xl shadow-lg" id="gallery">
-      <h2 class="text-2xl font-bold text-blue-350 mb-6 border-b pb-2 text-center">Happy to see you here❣️</h2>
-      <div class="slideshow-container">
-        <!--actual images-->
-        <div class="mySlides fade">
-  <img src="images/photo1.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x350/a5b4fc/ffffff?text=Photo+1'" style="width:100%" class="rounded-t-xl">
-</div>
+    <!-- ============================================================
+         PROJECTS
+         ============================================================ -->
+    <section id="projects" class="reveal scroll-mt-24">
+      <p class="font-mono text-xs tracking-widest uppercase mb-3" style="color:var(--accent-2)">Work</p>
+      <h2 class="font-display text-3xl font-bold mb-8" style="color:var(--text)">My Projects</h2>
 
-<div class="mySlides fade">
-  <img src="images/photo2.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x350/818cf8/ffffff?text=Photo+2'" style="width:100%" class="rounded-t-xl">
-</div>
+      <div class="grid sm:grid-cols-2 gap-6 reveal-stagger">
+        <div class="surface-card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">🚀</span>
+            <span class="tag tag-live">Live</span>
+          </div>
+          <h3 class="font-display text-lg font-semibold mb-2" style="color:var(--text)">Personal Portfolio Website</h3>
+          <p class="text-sm leading-relaxed" style="color:var(--text-muted)">
+            The very site you're looking at — built and continually improved as I learn HTML, CSS and JavaScript.
+          </p>
+        </div>
 
-<div class="mySlides fade">
-  <img src="images/photo3.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x350/6366f1/ffffff?text=Photo+3'" style="width:100%" class="rounded-t-xl">
-</div>
-
-<div class="mySlides fade">
-  <img src="images/photo4.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x350/4f46e5/ffffff?text=Photo+4'" style="width:100%" class="rounded-t-xl">
-</div>
-
-<div class="mySlides fade">
-  <img src="images/photo5.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x350/3730a3/ffffff?text=Photo+5'" style="width:100%" class="rounded-t-xl">
-</div>
-        
-        <!-- Navigation Buttons -->
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-      </div>
-      <br>
-      <div class="text-center pt-4">
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
+        <div class="surface-card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-3xl">🛠️</span>
+            <span class="tag tag-building"><span class="pulse-dot inline-block mr-1 align-middle"></span>Building</span>
+          </div>
+          <h3 class="font-display text-lg font-semibold mb-2" style="color:var(--text)">Something Unexpected</h3>
+          <p class="text-sm leading-relaxed" style="color:var(--text-muted)">
+            Working on another project to create something unexpected. More details coming soon.
+          </p>
+        </div>
       </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="section contact bg-white p-8 rounded-xl shadow-lg text-center" id="contact">
-  <h2 class="text-3xl font-bold text-blue-800 mb-6 border-b pb-2">Contact</h2>
+    <!-- ============================================================
+         GALLERY
+         ============================================================ -->
+    <section id="gallery" class="reveal scroll-mt-24">
+      <p class="font-mono text-xs tracking-widest uppercase mb-3" style="color:var(--accent-2)">Gallery</p>
+      <h2 class="font-display text-3xl font-bold mb-2" style="color:var(--text)">Happy to see you here ❣️</h2>
+      <p class="text-sm mb-8" style="color:var(--text-muted)">Swipe, click the arrows, or use your keyboard's left / right keys. Click a photo to zoom in.</p>
 
-  <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+      <div class="slideshow-container" id="slideshow" tabindex="0" aria-label="Photo gallery, use left and right arrow keys to navigate">
+        <div class="mySlides active">
+          <img src="images/photo1.jpg" onerror="this.onerror=null;this.src='https://placehold.co/900x600/1e1d2c/eeecf6?text=Photo+1'" alt="Photo 1">
+        </div>
+        <div class="mySlides">
+          <img src="images/photo2.jpg" onerror="this.onerror=null;this.src='https://placehold.co/900x600/1a1926/eeecf6?text=Photo+2'" alt="Photo 2">
+        </div>
+        <div class="mySlides">
+          <img src="images/photo3.jpg" onerror="this.onerror=null;this.src='https://placehold.co/900x600/242332/eeecf6?text=Photo+3'" alt="Photo 3">
+        </div>
+        <div class="mySlides">
+          <img src="images/photo4.jpg" onerror="this.onerror=null;this.src='https://placehold.co/900x600/1e1d2c/eeecf6?text=Photo+4'" alt="Photo 4">
+        </div>
+        <div class="mySlides">
+          <img src="images/photo5.jpg" onerror="this.onerror=null;this.src='https://placehold.co/900x600/1a1926/eeecf6?text=Photo+5'" alt="Photo 5">
+        </div>
 
-    <!-- 📧 Email Button -->
-    <a class="flex items-center justify-center space-x-2 px-5 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-       href="mailto:gauravsinghrajpoot2019@gmail.com" 
-       target="_blank">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24">
-        <path d="M2.01 6.03L12 13l9.99-6.97A2 2 0 0 0 20 4H4a2 2 0 0 0-1.99 2.03z"/><path d="M22 8.5l-10 7-10-7V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.5z"/>
-      </svg>
-      <span>Send Email</span>
-    </a>
+        <div class="slide-btn slide-prev" onclick="plusSlides(-1)" role="button" aria-label="Previous photo">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </div>
+        <div class="slide-btn slide-next" onclick="plusSlides(1)" role="button" aria-label="Next photo">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </div>
 
-    <!-- 💬 WhatsApp Button -->
-    <a class="flex items-center justify-center space-x-2 px-5 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-       href="https://wa.me/916388778495?text=Hello%20Gaurav,%20I%20want%20to%20contact%20you" 
-       target="_blank">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24">
-        <path d="M20.52 3.48A11.87 11.87 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.1.54 4.11 1.57 5.9L0 24l6.26-1.63A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.18-1.24-6.18-3.48-8.52zM12 22c-1.78 0-3.5-.45-5.05-1.32l-.36-.2-3.73.97.99-3.64-.23-.37A9.93 9.93 0 0 1 2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm4.58-7.7c-.25-.12-1.47-.73-1.7-.82-.23-.08-.4-.12-.57.13-.17.25-.65.82-.8.98-.15.17-.3.19-.55.06-.25-.12-1.06-.39-2.02-1.25-.75-.67-1.26-1.49-1.41-1.74-.15-.25-.02-.39.11-.51.12-.12.25-.3.37-.45.12-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.12-.57-1.38-.78-1.89-.2-.48-.41-.42-.57-.43-.15-.01-.32-.01-.5-.01s-.46.06-.7.32c-.25.25-.9.88-.9 2.14s.92 2.48 1.05 2.65c.12.17 1.8 2.76 4.35 3.87.61.26 1.09.42 1.46.53.61.19 1.17.16 1.61.1.49-.07 1.47-.6 1.68-1.18.21-.57.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>
-      </svg>
-      <span>WhatsApp</span>
-    </a>
+      <div class="text-center pt-5" id="dots-container"></div>
+    </section>
 
-    <!-- 📸 Instagram Button -->
-    <a class="flex items-center justify-center space-x-2 px-5 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 to-pink-700 to-purple-600 text-white font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-       href="https://www.instagram.com/stnmgaurav" 
-       target="_blank">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24">
-        <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10zm-5 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.75-2a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5z"/>
-      </svg>
-      <span>Instagram</span>
-    </a>
+    <!-- ============================================================
+         CONTACT
+         ============================================================ -->
+    <section id="contact" class="reveal scroll-mt-24 text-center">
+      <p class="font-mono text-xs tracking-widest uppercase mb-3" style="color:var(--accent-2)">Get in touch</p>
+      <h2 class="font-display text-3xl font-bold mb-3" style="color:var(--text)">Let's talk</h2>
+      <p class="text-sm mb-10" style="color:var(--text-muted)">Have a project, question, or just want to say hi? Reach out however's easiest.</p>
 
-  </div>
-</section>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a class="contact-btn" style="background:linear-gradient(135deg,#ef4444,#dc2626)"
+           href="mailto:gauravsinghrajpoot2019@gmail.com" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24">
+            <path d="M2.01 6.03L12 13l9.99-6.97A2 2 0 0 0 20 4H4a2 2 0 0 0-1.99 2.03z"/><path d="M22 8.5l-10 7-10-7V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.5z"/>
+          </svg>
+          <span>Send Email</span>
+        </a>
+
+        <a class="contact-btn" style="background:linear-gradient(135deg,#22c55e,#16a34a)"
+           href="https://wa.me/916388778495?text=Hello%20Gaurav,%20I%20want%20to%20contact%20you" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24">
+            <path d="M20.52 3.48A11.87 11.87 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.1.54 4.11 1.57 5.9L0 24l6.26-1.63A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.18-1.24-6.18-3.48-8.52zM12 22c-1.78 0-3.5-.45-5.05-1.32l-.36-.2-3.73.97.99-3.64-.23-.37A9.93 9.93 0 0 1 2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm4.58-7.7c-.25-.12-1.47-.73-1.7-.82-.23-.08-.4-.12-.57.13-.17.25-.65.82-.8.98-.15.17-.3.19-.55.06-.25-.12-1.06-.39-2.02-1.25-.75-.67-1.26-1.49-1.41-1.74-.15-.25-.02-.39.11-.51.12-.12.25-.3.37-.45.12-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.12-.57-1.38-.78-1.89-.2-.48-.41-.42-.57-.43-.15-.01-.32-.01-.5-.01s-.46.06-.7.32c-.25.25-.9.88-.9 2.14s.92 2.48 1.05 2.65c.12.17 1.8 2.76 4.35 3.87.61.26 1.09.42 1.46.53.61.19 1.17.16 1.61.1.49-.07 1.47-.6 1.68-1.18.21-.57.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>
+          </svg>
+          <span>WhatsApp</span>
+        </a>
+
+        <a class="contact-btn" style="background:linear-gradient(135deg,#f59e0b,#ec4899,#8b5cf6)"
+           href="https://www.instagram.com/stnmgaurav" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24">
+            <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10zm-5 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.75-2a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5z"/>
+          </svg>
+          <span>Instagram</span>
+        </a>
+      </div>
+
+      <button id="copy-email" class="font-mono text-xs mt-6 underline decoration-dotted" style="color:var(--text-muted)">
+        or copy: gauravsinghrajpoot2019@gmail.com
+      </button>
+    </section>
   </main>
 
-   <footer class="text-center py-6 bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 text-gray-800 text-sm mt-12 shadow-inner">
-    <p>© 2026 Gaurav | Made with <span class="text-red-500">❤️</span> by Gaurav </p>
+  <footer class="text-center py-8 border-t" style="border-color:var(--border); color:var(--text-muted)">
+    <p class="text-sm">© <span id="year"></span> Gaurav — Made with <span style="color:var(--accent)">❤</span></p>
   </footer>
 
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <button id="lightbox-close" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="Enlarged gallery photo">
+  </div>
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="Back to top">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+  </button>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
   <script>
-    // --- Navigation Bar Toggle Logic ---
+    /* ============================================================
+       THEME TOGGLE (in-memory only — no persistence, by design)
+       ============================================================ */
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const iconMoon = document.getElementById('icon-moon');
+    const iconSun = document.getElementById('icon-sun');
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      iconMoon.classList.toggle('hidden', isDark);
+      iconSun.classList.toggle('hidden', !isDark);
+    });
+
+    /* ============================================================
+       MOBILE MENU
+       ============================================================ */
     const navButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     const iconOpen = document.getElementById('menu-icon-open');
@@ -282,57 +604,157 @@
 
     navButton.addEventListener('click', () => {
       const isHidden = mobileMenu.classList.toggle('hidden');
-      
-      if (!isHidden) {
-        iconOpen.classList.add('hidden');
-        iconClose.classList.remove('hidden');
-      } else {
+      iconOpen.classList.toggle('hidden', !isHidden);
+      iconClose.classList.toggle('hidden', isHidden);
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
         iconOpen.classList.remove('hidden');
         iconClose.classList.add('hidden');
+      });
+    });
+
+    /* ============================================================
+       SCROLL PROGRESS BAR
+       ============================================================ */
+    const progressBar = document.getElementById('scroll-progress');
+    function updateProgress(){
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+      progressBar.style.width = scrolled + '%';
+    }
+    document.addEventListener('scroll', updateProgress, { passive: true });
+
+    /* ============================================================
+       BACK TO TOP
+       ============================================================ */
+    const backToTop = document.getElementById('back-to-top');
+    document.addEventListener('scroll', () => {
+      backToTop.classList.toggle('show', window.scrollY > 500);
+    }, { passive: true });
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    /* ============================================================
+       SCROLL REVEAL
+       ============================================================ */
+    const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+
+    /* ============================================================
+       SCROLLSPY (active nav link)
+       ============================================================ */
+    const sections = ['home','about','projects','gallery','contact'].map(id => document.getElementById(id));
+    const navLinks = document.querySelectorAll('.nav-link[data-nav]');
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector('.nav-link[data-nav="' + entry.target.id + '"]');
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach(s => { if (s) spy.observe(s); });
+
+    /* ============================================================
+       SLIDESHOW
+       ============================================================ */
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.mySlides');
+    const dotsContainer = document.getElementById('dots-container');
+    let autoTimer;
+
+    slides.forEach((_, i) => {
+      const d = document.createElement('span');
+      d.className = 'dot';
+      d.setAttribute('role', 'button');
+      d.setAttribute('aria-label', 'Go to photo ' + (i + 1));
+      d.addEventListener('click', () => showSlide(i));
+      dotsContainer.appendChild(d);
+    });
+    const dots = document.querySelectorAll('.dot');
+
+    function showSlide(n){
+      slideIndex = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('active', i === slideIndex));
+      dots.forEach((d, i) => d.classList.toggle('active', i === slideIndex));
+    }
+    function plusSlides(n){ showSlide(slideIndex + n); resetAutoplay(); }
+    function resetAutoplay(){
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => showSlide(slideIndex + 1), 4000);
+    }
+    showSlide(0);
+    resetAutoplay();
+
+    const slideshow = document.getElementById('slideshow');
+    slideshow.addEventListener('mouseenter', () => clearInterval(autoTimer));
+    slideshow.addEventListener('mouseleave', resetAutoplay);
+    slideshow.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') plusSlides(-1);
+      if (e.key === 'ArrowRight') plusSlides(1);
+    });
+
+    // Swipe support
+    let touchStartX = 0;
+    slideshow.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    slideshow.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(dx) > 40) plusSlides(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    /* ============================================================
+       LIGHTBOX
+       ============================================================ */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    slides.forEach(s => {
+      s.addEventListener('click', () => {
+        lightboxImg.src = s.querySelector('img').src;
+        lightbox.classList.add('open');
+        clearInterval(autoTimer);
+      });
+    });
+    function closeLightbox(){
+      lightbox.classList.remove('open');
+      resetAutoplay();
+    }
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+    /* ============================================================
+       COPY EMAIL
+       ============================================================ */
+    const toast = document.getElementById('toast');
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+    document.getElementById('copy-email').addEventListener('click', async () => {
+      const email = 'gauravsinghrajpoot2019@gmail.com';
+      try {
+        await navigator.clipboard.writeText(email);
+        showToast('Email copied to clipboard');
+      } catch (err) {
+        showToast('Copy failed — email: ' + email);
       }
     });
 
-    // Close menu when a link is clicked
-    mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            iconOpen.classList.remove('hidden');
-            iconClose.classList.add('hidden');
-        });
-    });
-
-    // --- Slideshow Logic ---
-    let slideIndex = 1;
-    showSlides(slideIndex);
-
-    function plusSlides(n) {
-      showSlides(slideIndex += n);
-    }
-
-    function currentSlide(n) {
-      showSlides(slideIndex = n);
-    }
-
-    function showSlides(n) {
-      let i;
-      let slides = document.getElementsByClassName("mySlides");
-      let dots = document.getElementsByClassName("dot");
-      if (n > slides.length) {slideIndex = 1}    
-      if (n < 1) {slideIndex = slides.length}
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";  
-      }
-      for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-      }
-      slides[slideIndex-1].style.display = "block";  
-      dots[slideIndex-1].className += " active";
-    }
-
-    // Automatic Slideshow (3.5 seconds interval)
-    setInterval(() => {
-      plusSlides(1);
-    }, 3500);
+    /* ============================================================
+       FOOTER YEAR
+       ============================================================ */
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
