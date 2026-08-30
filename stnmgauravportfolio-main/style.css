@@ -1,0 +1,270 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* Header */
+header {
+  background: linear-gradient(to right, #b3e5fc, #81d4fa);
+  padding: 25px 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  color: 0D47A1;
+  font-size: 2rem;
+}
+
+header p {
+  margin-top: 8px;
+  color: white;
+  font-size: 1rem;
+}
+
+/* Sections */
+.section {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #FF0000;
+}
+
+/* About Section */
+.about img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 20px 0;
+  object-fit: cover;
+  border: 4px solid #333;
+}
+
+/* Projects Section */
+.projects p {
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+/* Buttons */
+.email-btn, .whatsapp-btn {
+  display: inline-block;
+  padding: 12px 25px;
+  margin: 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.email-btn {
+  background-color: #007BFF; /* Blue */
+  color: white;
+}
+
+.email-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.whatsapp-btn {
+  background-color: #25D366; /* WhatsApp green */
+  color: white;
+}
+
+.whatsapp-btn:hover {
+  background-color: #1da851;
+  transform: scale(1.05);
+}
+
+/* Slideshow */
+.slideshow-container {
+  position: relative;
+  max-width: 700px;
+  margin: auto;
+}
+
+.mySlides {
+  display: none;
+}
+
+.mySlides img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: relative;
+  top: 50%;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.3s;
+  user-select: none;
+  border-radius: 0 3px 3px 0;
+}
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.6);
+}
+
+/* Dots */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+.active, .dot:hover {
+  background-color: #333;
+}
+
+/* Footer */
+footer {
+  background: linear-gradient(to right, #0056B3, #87CEEB);
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
+}
+
+/* Nam Jap Counter Page Styles */
+body.namjap-page {
+  background-color: #e0f7fa;
+  color: #4e342e;
+  text-align: center;
+  user-select: none;
+  min-height: 100vh; /* use min-height instead of height */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body.namjap-page h1 {
+  margin-bottom: 20px;
+  color: #4e342e;
+}
+
+/* Circle Container */
+#circleContainer {
+  margin: 40px auto 20px;
+  width: 200px;
+  height: 200px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, rgba(255,152,0,0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  overflow: visible;
+}
+
+/* Progress Ring */
+.progress-ring {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,140,0,0.3) 0%, transparent 70%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.progress-ring__circle {
+  stroke: #ff6f00;
+  stroke-width: 10;
+  fill: none;
+  filter: drop-shadow(0 0 10px #ff8f00);
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+/* Center Mantra Text */
+#mantraText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 22px;
+  font-weight: bold;
+  color: #4e342e;
+  text-shadow: 0 0 8px rgba(255, 200, 0, 0.8);
+  text-align: center;
+}
+
+/* Count Display */
+#countDisplay {
+  font-size: 20px;
+  margin-top: 10px;
+  color: #33e3f;
+}
+
+#cycleCount {
+  font-size: 20px;
+  margin-top: 10px;
+  color: #d84315;
+}
+
+/* Change Mantra Button */
+#changeMantraButton {
+  margin-top: 40px;
+  padding: 10px 18px;
+  background-color: #00BFFF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 0 10px #00BFFF, 0 0 10px #00BFFF, 0 0 10px #00BFFF;
+  transition: all 0.3s ease;
+}
+
+#changeMantraButton:hover {
+  background-color: #33CCFF;
+  transform: scale(1.05);
+}
+
+/* Footer for Naam Jap */
+body.namjap-page footer {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  background: linear-gradient(90deg, #00BFFF, #4CAF50, #FFEB3B, #FF9800, #E91E63);
+  color: white;
+  padding: 20px;
+  background-size: 400% 400%;
+  animation: gradientFlow 8s ease infinite;
+  margin-top: auto;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
